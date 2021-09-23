@@ -2,13 +2,13 @@
 {% block content %}
 
 <div class="row">
-    <form class="col s12 m8 offset-m2">
+    <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('register') }}">
       <div class="card-panel">
         <!-- username -->
         <div class="row">
             <div class="input-field col s12">
                 <i class="fas fa-user-plus prefix deep-purple-text text-darken-4"></i>
-                <input id="username" name="username" type="text" class="validate">
+                <input id="username" name="username" type="text" minlenght="5" maxlenght="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate" required>
                 <label for="username">Username</label>
             </div>
         </div>
@@ -16,7 +16,7 @@
         <div class="row">
             <div class="input-field col s12">
                 <i class="fas fa-user-lock prefix deep-purple-text text-darken-4"></i>
-                <input id="password" name="password" type="password" class="validate">
+                <input id="password" name="password" type="password" minlenght="5" maxlenght="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate" required>
                 <label for="password">Password</label>
             </div>
         </div>
@@ -24,8 +24,8 @@
         <div class="row">
             <div class="input-field col s12">
                 <i class="fas fa-user-lock prefix deep-purple-text text-darken-4"></i>
-                <input id="password" name="password" type="password" class="validate">
-                <label for="password">Confirm Password</label>
+                <input id="confirm_password" name="confirm_password" type="password" minlenght="5" maxlenght="15" pattern="^[a-zA-Z0-9]{5,15}$" class="validate" required>
+                <label for="confirm_password">Confirm Password</label>
             </div>
         </div>
         <!-- register -->
