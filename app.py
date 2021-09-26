@@ -139,8 +139,9 @@ def profile_edit(username):
 @app.route("/logout")
 def logout():
     flash("You have been logged out")
-    session.pop("user")
-    return redirect(url_for("login"))
+    session.pop("user", None)
+    return redirect(url_for("get_books"))
+    
     
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
