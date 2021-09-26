@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<h3 class="center-align deep-purple-text text-darken-4">{{ data_template["username"] }}'s Profile</h3>
+    <div class="row">
+        <div class="col s12 m8 offset-m2">
+            <div class="card-panel grey lighten-5 z-depth-1">
+              <div class="row valign-wrapper">
+                <div class="col s2">
+                  <img width="100" alt={{ data_template["username"] }} class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template["img_url"] }}">
+                </div>
+                  <div class="col s10">
+                    <span class="black-text">
+                    This is a square image. Add the "circle" class to it to make it appear circular.
+                    </span>
+                  </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('profile', username=data_template["username"]) }}"> 
+            <div class="card-panel">
+                <!-- user name -->
+                <div class="row">
+                    <div class="input-field col s6">
+                      <input id="first_name" name="first_name" type="text" class="validate" value="{{ data_template["user_firstname"] }}" required>
+                      <label for="first_name">First Name</label>
+                    </div>
+                    <div class="input-field col s6">
+                      <input id="last_name" name="last_name" type="text" class="validate" value="{{ data_template["user_lastname"] }}" required>
+                      <label for="last_name">Last Name</label>
+                    </div>
+                </div>
+                <!-- email -->
+                <div class="row">
+                    <div class="input-field col s6">
+                      <input id="email" type="email" name="email" class="validate" value="{{ data_template["user_email"] }}" required>
+                      <label for="email">Email</label>
+                    </div>
+                </div>
+                <!-- profile img URL -->
+                <div class="row">
+                  <div class="input-field col s6">
+                    <input id="img_url" type="text" name="img_url" value="{{ data_template["img_url"] }}">
+                    <label for="img_url">Picture URL</label>
+                  </div>
+              </div>
+                <div class="row">
+                  <button type="submit" id="profile_save" name="profile_save" class="col s12 btn-large deep-purple darken-4 text-shadow">
+                      Save Profile <i class="fas fa-save"></i>
+                  </button>
+              </div>
+              <div class="row">
+                <button type="submit" id="profile_delete" name="profile_delete" class="col s12 btn-large deep-purple darken-4 text-shadow">
+                    Delete Account <i class="material-icons">delete</i>
+                </button>
+            </div>
+            </div>
+        </form>
+        <div class="row">
+          <div class="col s12">
+              <p class="center-align">
+                  <a href="{{ url_for('profile', username=username) }}" class="deep-purple-text text-darken-4">Cancel</a>
+              </p>
+          </div>
+      </div>
+    </div>
+{% endblock %}
