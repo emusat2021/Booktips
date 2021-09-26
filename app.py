@@ -81,11 +81,39 @@ def login():
 
 @app.route("/profile/view/<username>", methods=["GET", "POST"])
 def profile(username):
-    username = mongo.db.users.find_one(
-        {"username": session["user"]})["username"]
-
     if session["user"]:
-        return render_template("profile.html", username=username)
+        # retrieve user id from the DB
+        user_id = mongo.db.users.find_one(
+            {"username": username})["_id"]
+        # edit profile action save
+        if request.method == "POST":
+            # update the DB
+
+            profile_data = {
+                "user_email": request.form.get("email").lower(),
+                "user_firstname": request.form.get("first_name").lower().capitalize(),
+                "user_lastname": request.form.get("last_name").lower().capitalize(),
+                "img_url": request.form.get("img_url"),
+                "user_id": user_id,
+            }
+            # update profile for the username in the DB
+            mongo.db.profiles.update({"user_id": ObjectId(user_id)}, profile_data)
+
+            flash("Your profile has been successfully updated!")
+        # GET method
+        # retrieve user profile from the DB
+        user_profile = mongo.db.profiles.find_one(
+            {"user_id": user_id})
+
+        data_template = {
+            "user_email": user_profile["user_email"],
+            "user_firstname": user_profile["user_firstname"],
+            "user_lastname": user_profile["user_lastname"],
+            "img_url": user_profile["img_url"],
+            "username": username,
+        }
+        return render_template("profile.html", data_template=data_template)
+        
 
     return redirect(url_for("login"))
 
