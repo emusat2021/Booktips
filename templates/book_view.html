@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+{% if book %}
+    <h3 class="light-blue-text text-darken-4 center-align">Book details</h3>
+    <div class="col s12 m7">
+        <div class="card horizontal">
+            <div class="card-image">
+                <img src="{{ book.book_cover_url }}">
+            </div>
+            <div class="card-stacked">
+                <div class="card-content">
+                    <h4 class="header">{{ book.book_title }}</h4>
+                    <h5 class="header">by {{ book.book_author_name }}</h5>
+                    {% if book.book_isbn %}
+                    ISBN: {{ book.book_isbn }} <br>
+                    {% endif %}
+                    <hr>
+                    <p>{{ book.book_description }}</p>
+                </div>
+                <div class="card-action">
+                    <a href="#">This is a link</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+<h3> This book is not in the database.</h3>
+{% endif %}
+{% endblock %}
