@@ -6,12 +6,12 @@
         <div class="col s12 m3">
             <div class="card large">
                 <div class="card-image img-custom">
-                    <a href="{{ url_for("book_view", book_id=book.book_id) }}">
+                    <a href="{{ url_for("book_view", book_id=book._id) }}">
                         <img src="{{ book.book_cover_url }}" class="img-custom">
                     </a>
                 </div>
                 <div class="card-content">
-                    <span class="card-title"><a href="{{ url_for("book_view", book_id=book.book_id) }}">{{ book.book_title }}</a></span>
+                    <span class="card-title"><a href="{{ url_for("book_view", book_id=book._id) }}">{{ book.book_title }}</a></span>
                     <span class="card-title">{{ book.book_author_name }}</span>
                     <span >ISBN: {{ book.book_isbn }}</span>
                     <p>{{ book.book_description }}</p>
