@@ -199,6 +199,13 @@ def profile_edit(username):
     return render_template("profile_edit.html", data_template=data_template)
 
 
+@app.route("/profile/delete/<username>")
+def profile_delete(username):
+    flash("Your account has been deleted!")
+    session.pop("user", None)
+    return redirect(url_for("get_books"))
+
+
 @app.route("/logout")
 def logout():
     flash("You have been logged out")
