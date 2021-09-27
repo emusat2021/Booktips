@@ -64,6 +64,15 @@ def book_view(book_id):
 
     return render_template("book_view.html", book=book)
 
+
+@app.route("/add_book", methods=["GET", "POST"])
+def add_book():
+    if request.method == "POST":
+        pass
+        return redirect(url_for("get_books"))
+
+    return render_template("add_book.html", book=id)
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
