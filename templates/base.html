@@ -3,18 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
-        integrity="sha512-xA6Hp6oezhjd6LiLZynuukm80f8BoZ3OpcEYaqKoCV3HKQDrYjDE1Gu8ocxgxoXmwmSzM4iqPvCsOkQNiu41GA==" crossorigin="anonymous" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"integrity="sha512-xA6Hp6oezhjd6LiLZynuukm80f8BoZ3OpcEYaqKoCV3HKQDrYjDE1Gu8ocxgxoXmwmSzM4iqPvCsOkQNiu41GA==" crossorigin="anonymous" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>Book Tips</title>
 </head>
 <body>
+
+    <header>
+        <!-- top navbar materialize -->
+        <nav class="nav-extend z-depth-3 deep-purple darken-1">
+          <div class="nav-wrapper">
+            <a href="{{ url_for('get_books') }}" class="brand-logo">Book Tips</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger right"><i class="fas fa-bars"></i></a>
+            <ul class="right hide-on-med-and-down">
+              <li><a href="{{ url_for('get_books') }}">Home</a></li>
+              {% if session.user %}
+                <li><a href="{{ url_for('profile', username=session['user']) }}">Profile</a></li>
+                <li><a href="{{ url_for('add_book') }}">New Book</a></li>
+                <li><a href="#">Manage Book</a></li>
+                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+              {% else %}
+                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </nav> 
+        <!-- mobile sidenav -->
+        <ul class="sidenav" id="mobile-demo">
+          <li><h4 class="center-align deep-purple-text text-deep-purple accent-4"> Book Tips</h4></li>
+          <li><a href="{{ url_for('get_books') }}">Home</a></li>
+          {% if session.user %}
+            <li><a href="{{ url_for('profile', username=session['user']) }}">Profile</a></li>
+            <li><a href="{{ url_for('add_book') }}">New Book</a></li>
+            <li><a href="#">Manage Book</a></li>
+            <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+          {% else %}
+            <li><a href="{{ url_for('login') }}">Log In</a></li>
+            <li><a href="{{ url_for('register') }}">Register</a></li>
+          {% endif %}
+        </ul>
+    </header>
    
-    <h1>I'm part of the base template!</h1>
-    {% block content %}
-    {% endblock %}
+    <section>
+      <!-- flash messages -->
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="row flashes">
+              <h4 class="center-align deep-purple deep-purple lighten-3">{{ message }}</h4>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </section>
+
+
+    <main class="container">
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    <!-- footer -->
+    <footer class="page-footer footer-custom deep-purple darken-4">
+      <div class="footer-copyright">
+        <div class="container center-align">
+        © 2021 Copyright Book Tips
+        </div>
+      </div>
+    </footer>
 
     <script
     src="https://code.jquery.com/jquery-3.6.0.min.js"
