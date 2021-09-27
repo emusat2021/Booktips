@@ -53,15 +53,15 @@ def get_books():
 
 @app.route("/book/view/<book_id>")
 def book_view(book_id):
-    
-    book = {
-            "book_id": 1231,
-            "book_title": "Book1",
-            "book_author_name": "Jon Doe",
-            "book_cover_url": "https://covers.openlibrary.org/b/id/7169157-L.jpg",
-            "book_isbn": "",
-            "book_description": "Lorem ipsum",
-        }
+    # check if the given book id is valid mongodb object id
+    if ObjectId.is_valid(book_id): 
+        book = mongo.db.books.find_one(
+            {"_id": ObjectId(book_id)})
+        print(type(book))
+        print(book)
+    else:
+        book = None
+
     return render_template("book_view.html", book=book)
 
 @app.route("/register", methods=["GET", "POST"])
