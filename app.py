@@ -23,7 +23,32 @@ mongo = PyMongo(app)
 @app.route("/")
 @app.route("/get_books")
 def get_books():
-    books = mongo.db.books.find()
+    books = [
+        {
+            "book_id": "614ae0e6f7c7a8e2220d1963",
+            "book_title": "Book1",
+            "book_author_name": "Jon Doe",
+            "book_cover_url": "https://covers.openlibrary.org/b/id/7169157-L.jpg",
+            "book_isbn": "",
+            "book_description": "Lorem ipsum",
+        },
+        {
+            "book_id": 1232,
+            "book_title": "Book2",
+            "book_author_name": "Jane Doe",
+            "book_cover_url": "https://covers.openlibrary.org/b/id/8503239-L.jpg",
+            "book_isbn": "",
+            "book_description": "Lorem ipsum2",
+        },
+        {
+            "book_id": 1233,
+            "book_title": "Book3",
+            "book_author_name": "Jane Throw",
+            "book_cover_url": "https://covers.openlibrary.org/b/id/10578408-L.jpg",
+            "book_isbn": "",
+            "book_description": "Lorem ipsum3",
+        },
+    ]
     return render_template("books.html", books=books)
 
 
