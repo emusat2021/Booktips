@@ -118,7 +118,7 @@ def login():
 
 @app.route("/profile/view/<username>", methods=["GET", "POST"])
 def profile(username):
-    if session["user"]:
+    if session.get("user"):
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one(
             {"username": username})["_id"]
