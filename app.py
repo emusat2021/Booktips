@@ -87,12 +87,28 @@ def register():
             flash("Passwords do not match")
             return redirect(url_for("register"))
 
+        # build document to insert into MongoDB
         register = {
             "username": request.form.get("username").lower(),
             "password": generate_password_hash(request.form.get("password")),
         }
-
+        # insert the document into the database
         mongo.db.users.insert_one(register)
+
+        # retrieve user id from the DB
+        user_id = mongo.db.users.find_one(
+            {"username": request.form.get("username").lower()})["_id"]
+        # build document to insert into MongoDB
+        profile_data = {
+            "user_email": "",
+            "user_firstname": "",
+            "user_lastname": "",
+            "img_url": "https://s.gr-assets.com/assets/nophoto/user/u_111x148-9394ebedbb3c6c218f64be9549657029.png",
+            "user_id": user_id,
+        }
+        # insert the document into the database
+        mongo.db.profiles.insert_one(profile_data)
+
         session["user"] = request.form.get("username").lower()
         flash("Your account has been successfully created!")
         return redirect(url_for("profile", username=session["user"]))
