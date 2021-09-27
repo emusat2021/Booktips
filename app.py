@@ -46,11 +46,33 @@ def book_view(book_id):
 
 @app.route("/add_book", methods=["GET", "POST"])
 def add_book():
-    if request.method == "POST":
-        pass
-        return redirect(url_for("get_books"))
+    """
+    This route adds a new book in the database.
+    It has two methods: GET and POST.
+    GET method displays a form for user to fill in.
+    POST method adds the book in the database and then 
+    redirects user to home page.
+    This function can only be used by an authenticated user.
+    """
+    if session.get("user"):
+        if request.method == "POST":
+            # collect data from form and build document in collection books in MongoDB
+            book_data = {
+                "book_title": request.form.get("book_title"),
+                "book_author_name": request.form.get("book_author_name"),
+                "book_cover_url": request.form.get("book_cover_url"),
+                "book_isbn": request.form.get("book_isbn"),
+                "book_description": request.form.get("book_description"),
+            }
+            # insert the document into the database
+            mongo.db.books.insert_one(book_data)
+            return redirect(url_for("get_books"))
 
-    return render_template("add_book.html", book=id)
+        return render_template("add_book.html", book=id)
+
+    flash("You must be authenticated in order to add books!")
+    return redirect(url_for("get_books"))
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
