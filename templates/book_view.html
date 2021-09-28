@@ -32,6 +32,11 @@
                     {% if book.book_isbn %}
                     ISBN: {{ book.book_isbn }} <br>
                     {% endif %}
+                    <div class="row">
+                        <div class="col s12">
+                            Total reviews
+                        </div>
+                    </div>
                     <hr>
                     <p>
                         {% if book.book_description %}
@@ -43,7 +48,7 @@
 
                 </div>
                 <div class="card-action">
-                    <a href="#">This is a link</a>
+                    <a href="{{ url_for('add_review') }}"class="deep-purple-text text-darken-4"> Write a review!</a>
                 </div>
             </div>
         </div>

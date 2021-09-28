@@ -74,6 +74,11 @@ def add_book():
     return redirect(url_for("get_books"))
 
 
+@app.route("/add_review", methods=["GET", "POST"])
+def add_review():
+    return redirect(url_for("get_books"))
+
+
 @app.route("/search", methods=["GET", "POST"])
 def search():
     if request.method == "POST":
