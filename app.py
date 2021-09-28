@@ -74,6 +74,15 @@ def add_book():
     return redirect(url_for("get_books"))
 
 
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "POST":
+        query = request.form.get("query")
+        books = list(mongo.db.books.find({"$text": {"$search": query}}))
+        return render_template("books.html", books=books)
+    return redirect(url_for("get_books"))
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
