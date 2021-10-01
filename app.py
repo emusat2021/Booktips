@@ -92,9 +92,46 @@ def add_book():
     return redirect(url_for("get_books"))
 
 
-@app.route("/add_review", methods=["GET", "POST"])
-def add_review():
-    return redirect(url_for("get_books"))
+@app.route("/add_review/<book_id>", methods=["GET", "POST"])
+def add_review(book_id):
+    if session.get("user"):
+        user_id = mongo.db.users.find_one(
+            {"username": session["user"]})["_id"]
+        
+        # search for a review of the current book and the current user
+        review_db = mongo.db.reviews.find_one({
+            "book_id": ObjectId(book_id),
+            "user_id": user_id,
+        })
+        # if user has already review on the respective book then rediret to edit
+        if review_db:
+            return redirect(url_for("edit_review", book_id=book_id))
+
+
+        if request.method == "GET":
+            # read book details from DB
+            book = mongo.db.books.find_one(
+                {"_id": ObjectId(book_id)})
+        
+            return render_template("action_review.html", book=book, review_j2=review_db, source_route="add")
+
+        if request.method == "POST":
+
+
+            # object to be put in MongoDB(structure of a document in collection reviews)
+            user_review = {
+                "review_text": request.form.get("user_review"),
+                "user_id": user_id,
+                "book_id": ObjectId(book_id),
+            }
+            # insert the document into the database
+            mongo.db.reviews.insert_one(user_review)
+            return redirect(url_for("get_books"))
+
+    else:
+        flash("You must be authenticated in order to add reviews!")
+        return redirect(url_for("get_books"))
+
 
 
 @app.route("/search", methods=["GET", "POST"])

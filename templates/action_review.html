@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="deep-purple-text text-darken-4 center-align">Book details</h3>
+<div class="row">
+  <div class="col s12">
+    <div class="card horizontal">
+      <div class="card-image">
+          <img src="{{ book.book_cover_url }}">
+      </div>
+      <div class="card-stacked">
+          <div class="card-content">
+              <h4 class="header">{{ book.book_title }}</h4>
+              <h5 class="header">by {{ book.book_author_name }}</h5>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  {% if source_route == "add" %}
+  <form class="col s12" action="{{ url_for('add_review', book_id=book._id) }}" method="POST">
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea id="user_review" name="user_review" class="materialize-textarea" validate required></textarea>
+        <label for="user_review" class="deep-purple-text text-darken-4">Write a review here!</label>
+      </div>
+    </div>
+    <div class="row">
+      <button type="submit" id="review_save" name="review_save" class="col s12 btn-large deep-purple darken-4 text-shadow">
+          Post Review<i class="fas fa-plus"></i>
+      </button>
+    </div>
+    <div class="row">
+      <div class="col s12">
+          <p class="center-align">
+              <a href="{{ url_for('add_review', book_id=book._id) }}" class="deep-purple-text text-darken-4"><h5 class="center-align">Reset</h5
+                ></a>
+          </p>
+      </div>
+    </div>
+  </form>  
+  {% endif %}  
+</div>
+{% endblock %}
