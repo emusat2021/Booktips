@@ -79,6 +79,7 @@ def add_book():
                 "book_cover_url": request.form.get("book_cover_url"),
                 "book_isbn": request.form.get("book_isbn"),
                 "book_description": request.form.get("book_description"),
+                "user_id":  request.form.get("book_user_id")
             }
             # insert the document into the database
             mongo.db.books.insert_one(book_data)
