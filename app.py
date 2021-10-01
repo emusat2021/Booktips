@@ -27,21 +27,37 @@ def get_books():
     This route displays a list of all books
     from database in home webpage.
     """
-    books = mongo.db.books.find().sort("book_title", 1)
+    books = list(mongo.db.books.find().sort("book_title", 1))
     return render_template("books.html", books=books)
 
 @app.route("/book/view/<book_id>")
 def book_view(book_id):
     # check if the given book id is valid mongodb object id
-    if ObjectId.is_valid(book_id): 
+    if ObjectId.is_valid(book_id):
         book = mongo.db.books.find_one(
             {"_id": ObjectId(book_id)})
-        print(type(book))
-        print(book)
+    
+        # read/search in MongoDB for all reviews for a specific book id
+        reviews = list(
+            mongo.db.reviews.find({"book_id": ObjectId(book_id)})
+        )
+        # idea taken from https://stackoverflow.com/questions/14071038/add-an-element-in-each-dictionary-of-a-list-list-comprehension
+        # add 2 new keys to each dictionary in list reviews
+        for review in reviews:
+
+            img_url_em = mongo.db.profiles.find_one({"user_id": review["user_id"]})["img_url"]
+            username_em = mongo.db.users.find_one({"_id": review["user_id"]})["username"]
+
+            review.update({
+                "img_url": img_url_em,
+                "username": username_em,
+            })
+
+
     else:
         book = None
 
-    return render_template("book_view.html", book=book)
+    return render_template("book_view.html", book=book, reviews=reviews, )
 
 
 @app.route("/add_book", methods=["GET", "POST"])
@@ -63,14 +79,128 @@ def add_book():
                 "book_cover_url": request.form.get("book_cover_url"),
                 "book_isbn": request.form.get("book_isbn"),
                 "book_description": request.form.get("book_description"),
+                "user_id":  request.form.get("book_user_id")
             }
             # insert the document into the database
             mongo.db.books.insert_one(book_data)
             return redirect(url_for("get_books"))
 
-        return render_template("add_book.html", book=id)
+        if request.method == "GET":
+            return render_template("add_book.html", book=id)
 
     flash("You must be authenticated in order to add books!")
+    return redirect(url_for("get_books"))
+
+
+@app.route("/add_review/<book_id>", methods=["GET", "POST"])
+def add_review(book_id):
+    if session.get("user"):
+        user_id = mongo.db.users.find_one(
+            {"username": session["user"]})["_id"]
+        
+        # search for a review of the current book and the current user
+        review_db = mongo.db.reviews.find_one({
+            "book_id": ObjectId(book_id),
+            "user_id": user_id,
+        })
+        # if user has already review on the respective book then rediret to edit
+        if review_db:
+            return redirect(url_for("edit_review", book_id=book_id))
+
+
+        if request.method == "GET":
+            # read book details from DB
+            book = mongo.db.books.find_one(
+                {"_id": ObjectId(book_id)})
+        
+            return render_template("action_review.html", book=book, review_j2=review_db, source_route="add")
+
+        if request.method == "POST":
+
+
+            # object to be put in MongoDB(structure of a document in collection reviews)
+            user_review = {
+                "review_text": request.form.get("user_review"),
+                "user_id": user_id,
+                "book_id": ObjectId(book_id),
+            }
+            # insert the document into the database
+            mongo.db.reviews.insert_one(user_review)
+            return redirect(url_for("get_books"))
+
+    else:
+        flash("You must be authenticated in order to add reviews!")
+        return redirect(url_for("get_books"))
+
+
+@app.route("/edit_review/<book_id>", methods=["GET", "POST"])
+def edit_review(book_id):
+    if session.get("user"):
+        user_id = mongo.db.users.find_one(
+            {"username": session["user"]})["_id"]
+
+        if request.method == "GET":
+            # read book details from DB
+            book = mongo.db.books.find_one(
+                {"_id": ObjectId(book_id)})
+            
+            # search using a filter for a review of the current book and the current user
+            review_db = mongo.db.reviews.find_one({
+                "book_id": ObjectId(book_id),
+                "user_id": user_id,
+            })
+            
+            return render_template("action_review.html", book=book, review_j2=review_db, source_route="edit")
+
+        if request.method == "POST":
+
+            # object to be put in MongoDB(structure of a document in collection reviews)
+            update_user_review = {
+                "review_text": request.form.get("user_review"),
+                "user_id": user_id,
+                "book_id": ObjectId(book_id),
+            }
+            # update the document into the database
+            mongo.db.reviews.update({
+                "user_id": user_id,
+                "book_id": ObjectId(book_id),
+            }, update_user_review)
+            return redirect(url_for("book_view", book_id=book_id))
+
+    else:
+        flash("You must be authenticated in order to edit reviews!")
+        return redirect(url_for("get_books"))
+
+
+@app.route("/delete_review/<book_id>")
+def delete_review(book_id):
+    """
+    Delete review.
+    First we check user's authentication.
+    Then delete.
+    """
+    if session.get("user"):
+        user_id = mongo.db.users.find_one(
+            {"username": session["user"]})["_id"]
+        # filter on book id and specific user id
+        mongo.db.reviews.remove({
+            "book_id": ObjectId(book_id),
+            "user_id": user_id,
+            })
+
+        flash("Review Successfully Deleted")
+        return redirect(url_for("profile", username=session["user"]))
+    else:
+        flash("You must be authenticated in order to delete reviews!")
+        return redirect(url_for("get_books"))   
+
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "POST":
+        query = request.form.get("query")
+        books = list(mongo.db.books.find({"$text": {"$search": query}}))
+        return render_template("books.html", books=books)
     return redirect(url_for("get_books"))
 
 
@@ -175,7 +305,19 @@ def profile(username):
             "img_url": user_profile["img_url"],
             "username": username,
         }
-        return render_template("profile.html", data_template=data_template)
+        # find all books created by the current user
+        books = list(mongo.db.books.find({"user_id": user_id}).sort("book_title", 1))
+        # find all reviews created by the current user
+        reviews = list(mongo.db.reviews.find({"user_id": user_id}))
+
+        # add details/title about the respective book in each review
+        for review in reviews:
+            book_info_em = mongo.db.books.find_one({"_id": review["book_id"]})
+
+            review.update({
+                "book_title": book_info_em["book_title"],
+            })
+        return render_template("profile.html", data_template=data_template, books=books, reviews=reviews)
         
 
     return redirect(url_for("login"))
