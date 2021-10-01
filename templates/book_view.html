@@ -48,7 +48,19 @@
 
                 </div>
                 <div class="card-action">
-                    <a href="{{ url_for('add_review') }}"class="deep-purple-text text-darken-4"> Write a review!</a>
+<!-- Reviews -->
+<h5>REVIEWS:</h5>
+{% for review in reviews %}
+<div class="row">
+    <div class="col s12">
+        <div class="card horizontal">
+            <div class="card-image">
+                <img src="{{ review.img_url }}">
+            </div>
+            <div class="card-stacked">
+                <div class="card-content">
+                 <h5>{{ review.username }}</h5>   
+                <p>{{ review.review_text }}</p>
                 </div>
             </div>
         </div>

@@ -33,15 +33,31 @@ def get_books():
 @app.route("/book/view/<book_id>")
 def book_view(book_id):
     # check if the given book id is valid mongodb object id
-    if ObjectId.is_valid(book_id): 
+    if ObjectId.is_valid(book_id):
         book = mongo.db.books.find_one(
             {"_id": ObjectId(book_id)})
-        print(type(book))
-        print(book)
+    
+        # read/search in MongoDB for all reviews for a specific book id
+        reviews = list(
+            mongo.db.reviews.find({"book_id": ObjectId(book_id)})
+        )
+        # idea taken from https://stackoverflow.com/questions/14071038/add-an-element-in-each-dictionary-of-a-list-list-comprehension
+        # add 2 new keys to each dictionary in list reviews
+        for review in reviews:
+
+            img_url_em = mongo.db.profiles.find_one({"user_id": review["user_id"]})["img_url"]
+            username_em = mongo.db.users.find_one({"_id": review["user_id"]})["username"]
+
+            review.update({
+                "img_url": img_url_em,
+                "username": username_em,
+            })
+
+
     else:
         book = None
 
-    return render_template("book_view.html", book=book)
+    return render_template("book_view.html", book=book, reviews=reviews, )
 
 
 @app.route("/add_book", methods=["GET", "POST"])
