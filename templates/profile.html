@@ -1,32 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<h3 class="center-align deep-purple-text text-darken-4">{{ data_template.username }}'s Profile</h3>
+<h3 class="center-align deep-purple-text text-darken-4">{{ data_template.username }}'s DISPLAY PROFILE</h3>
     <div class="row">
         <div class="col s12 m8 offset-m2">
-            <div class="card-panel grey lighten-5 z-depth-1">
+            <div class="card-panel">
               <div class="row valign-wrapper">
-                <div class="col s2">
-                  <img width="100" alt={{ data_template.username }} class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template.img_url }}">
+                <div class="col s12">
+                  <img width="100" alt={{ data_template.username }} class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template.img_url }}"><br>
+                  <!-- Edit profile -->         
+                  <a href="{{ url_for('profile_edit', username=data_template.username) }}" class="col s12 m6 btn-small deep-purple darken-1 text-shadow">EDIT PROFILE</a>
                 </div>
-                  <div class="col s10">
-                    <span class="black-text">
-                    This is a square image. Add the "circle" class to it to make it appear circular.
+                <div class="col s10">
+                  <span class="black-text">
+                    <h5 class="deep-purple-text text-darken-4">Full name: {{ data_template.user_firstname }} {{ data_template.user_lastname }}</h5>
+                    <h5 class="deep-purple-text text-darken-4">Email: {{ data_template.user_email }}</h5>
                     </span>
-                  </div>
+                </div>
               </div>
             </div>
         </div>
     </div>
-    <h3 class="center-align deep-purple-text text-darken-4">{{ data_template.user_firstname }} {{ data_template.user_lastname }}</h3><br>
-    <h3 class="center-align deep-purple-text text-darken-4">{{ data_template.user_email }}</h3>
-
-    <h3 class="center-align deep-purple-text text-darken-4">{{ data_template.username }}'s RECENT REVIEWS</h3><br>
-
+    <h5 class="center-align deep-purple-text text-darken-4">{{ data_template.username }}'s RECENT UPDATES: </h5><br>
+    <!-- Books added by user -->
+    <h5 class="header deep-purple-text text-darken-4">Books added</h5>
     <div class="row">
-      <div class="col s12">
-          <p class="center-align">
-            <a href="{{ url_for('profile_edit', username=data_template.username) }}" class="deep-purple-text text-darken-4">EDIT Profile</a>
-          </p>
       </div>
   </div>
 
