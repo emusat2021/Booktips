@@ -41,5 +41,27 @@
     </div>
   </form>  
   {% endif %}  
+  {% if source_route == "edit" %}
+  <form class="col s12" action="{{ url_for('edit_review', book_id=book._id) }}" method="POST">  
+    <div class="row">
+      <div class="input-field col s12">
+        <textarea id="user_review" name="user_review" class="materialize-textarea" validate required>{{ review_j2.review_text }}</textarea>
+        <label for="user_review" class="deep-purple-text text-darken-4">Edit a review here!</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s6 m3">
+        <button type="submit" id="update_review" name="update_review" class="col s12 btn-small deep-purple darken-1 text-shadow">
+            Update Review <i class="material-icons"></i>
+        </button>
+      </div>
+      <div class="col s6 m3">
+        <button type="submit" id="delete_review" name="delete_review" class="col s12 btn-small deep-purple darken-1 text-shadow">
+            Delete Review <i class="material-icons">delete</i>
+        </button>
+      </div>
+    </div>
+  </form>
+  {% endif %}
 </div>
 {% endblock %}

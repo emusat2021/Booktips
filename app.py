@@ -133,6 +133,45 @@ def add_review(book_id):
         return redirect(url_for("get_books"))
 
 
+@app.route("/edit_review/<book_id>", methods=["GET", "POST"])
+def edit_review(book_id):
+    if session.get("user"):
+        user_id = mongo.db.users.find_one(
+            {"username": session["user"]})["_id"]
+
+        if request.method == "GET":
+            # read book details from DB
+            book = mongo.db.books.find_one(
+                {"_id": ObjectId(book_id)})
+            
+            # search using a filter for a review of the current book and the current user
+            review_db = mongo.db.reviews.find_one({
+                "book_id": ObjectId(book_id),
+                "user_id": user_id,
+            })
+            
+            return render_template("action_review.html", book=book, review_j2=review_db, source_route="edit")
+
+        if request.method == "POST":
+
+            # object to be put in MongoDB(structure of a document in collection reviews)
+            update_user_review = {
+                "review_text": request.form.get("user_review"),
+                "user_id": user_id,
+                "book_id": ObjectId(book_id),
+            }
+            # update the document into the database
+            mongo.db.reviews.update({
+                "user_id": user_id,
+                "book_id": ObjectId(book_id),
+            }, update_user_review)
+            return redirect(url_for("book_view", book_id=book_id))
+
+    else:
+        flash("You must be authenticated in order to edit reviews!")
+        return redirect(url_for("get_books"))
+
+
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
