@@ -84,7 +84,8 @@ def add_book():
             mongo.db.books.insert_one(book_data)
             return redirect(url_for("get_books"))
 
-        return render_template("add_book.html", book=id)
+        if request.method == "GET":
+            return render_template("add_book.html", book=id)
 
     flash("You must be authenticated in order to add books!")
     return redirect(url_for("get_books"))
