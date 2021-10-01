@@ -32,6 +32,14 @@
 
                 </div>
                 <div class="card-action">
+                    <a href="{{ url_for('add_review', book_id=book._id) }}" class="col s12 m3 btn-small deep-purple darken-1 text-shadow">
+                     Write a review!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Reviews -->
 <h5>REVIEWS:</h5>
 {% for review in reviews %}
