@@ -2,7 +2,7 @@
 {% block content %}
 <h3 class="deep-purple-text text-darken-4 center-align "><i>Discover your next great book!</i></h3>
 <p class="deep-purple-text text-darken-4 center-align">
-    Book Tips compiles the best and most popular books, star and creative reviews.
+    <strong>Book Tips</strong> compiles the best and most popular books and creative reviews.
     It’s a fun and interactive way to geek out over your favorite reads and discover all the coolest new titles you won’t find anywhere else. 
 </p>
 
@@ -16,8 +16,8 @@
                 <label for="query">Search Books</label>
             </div>
             <div class="col s12 m4">
-                <a href="{{ url_for('get_books') }}" class="red btn text-shadow">Reset</a>
-                <button type="submit" class="deep-purple darken-1 btn text-shadow">
+                <a href="{{ url_for('get_books') }}" class="s3 light-blue darken-4 btn text-shadow">Reset</a>
+                <button type="submit" class="s3 deep-purple darken-1 btn text-shadow">
                     <i class="fas fa-search left"></i> Search
                 </button>
             </div>
@@ -25,9 +25,9 @@
     </form>
 </div>
 
-{% for book in books %}
 <div class="row">
-    <div class="col s12 m3">
+    {% for book in books %}
+    <div class="col s12 m6">
         <div class="card large">
             <div class="card-image img-custom">
                 <a href="{{ url_for("book_view", book_id=book._id) }}">
@@ -35,14 +35,15 @@
                 </a>
             </div>
             <div class="card-content">
-                <span class="card-title"><a href="{{ url_for("book_view", book_id=book._id) }}">{{ book.book_title }}</a></span>
+                <span class="card-title"><a href="{{ url_for("book_view", book_id=book._id) }}" class="deep-purple-text text-darken-1">{{ book.book_title }}</a></span>
                 <span class="card-title">{{ book.book_author_name }}</span>
-                <span >ISBN: {{ book.book_isbn }}</span>
+                <span ><a href="{{ url_for("book_view", book_id=book._id) }}" class="deep-purple-text text-darken-4"><strong>READ THE REVIEW></strong></a></span>
             </div>
         </div>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}
+
 
 {% if books|length == 0 %}
 <h3 class="red-text text-darken-4 center-align">No Results Found</h3>
