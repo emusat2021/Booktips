@@ -48,24 +48,26 @@
                   </div>
                 </div>
                 <div class="row">
-                  <button type="submit" id="profile_save" name="profile_save" class="col s12 btn-large deep-purple darken-4 text-shadow">
-                      Save Profile <i class="fas fa-save"></i>
-                  </button>
-                </div>
-                <div class="row">
-                  <button type="submit" id="profile_delete" name="profile_delete" class="col s12 btn-large deep-purple darken-4 text-shadow">
-                      Delete Account <i class="material-icons">delete</i>
-                  </button>
-                </div>
-                <div class="row">
-                  <div class="col s12">
-                      <p class="center-align">
-                          <a href="{{ url_for('profile', username=username) }}" class="deep-purple-text text-darken-4"><h5 class="center-align">Cancel</h5
-                            ></a>
-                      </p>
+                  <div class="col s12 m3">
+                    <button type="reset" class="col s12 btn-small light-blue darken-4 text-shadow">
+                        Reset <i class="fas fa-reset"></i>
+                    </button>
                   </div>
-              </div>
-            </div>
+                  <div class="col s12 m3">
+                    <button type="submit" id="profile_save" name="profile_save" class="col s12 btn-small deep-purple darken-4 text-shadow">
+                        Save Profile <i class="fas fa-save"></i>
+                    </button>
+                  </div>
+                  
+                </div>
+                <div class="row">
+                  <div class="col s12 m6">
+                    <button type="submit" id="profile_delete" name="profile_delete" class="col s12 btn-small deep-purple darken-4 text-shadow">
+                        Delete Account <i class="material-icons">delete</i>
+                    </button>
+                </div>
+                </div>
+                </div>
             
       </form>
 
