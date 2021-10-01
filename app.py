@@ -305,7 +305,19 @@ def profile(username):
             "img_url": user_profile["img_url"],
             "username": username,
         }
-        return render_template("profile.html", data_template=data_template)
+        # find all books created by the current user
+        books = list(mongo.db.books.find({"user_id": user_id}).sort("book_title", 1))
+        # find all reviews created by the current user
+        reviews = list(mongo.db.reviews.find({"user_id": user_id}))
+
+        # add details/title about the respective book in each review
+        for review in reviews:
+            book_info_em = mongo.db.books.find_one({"_id": review["book_id"]})
+
+            review.update({
+                "book_title": book_info_em["book_title"],
+            })
+        return render_template("profile.html", data_template=data_template, books=books, reviews=reviews)
         
 
     return redirect(url_for("login"))

@@ -24,7 +24,64 @@
     <!-- Books added by user -->
     <h5 class="header deep-purple-text text-darken-4">Books added</h5>
     <div class="row">
+      {% for book in books %}
+      <div class="col s12 m6">
+          <div class="card large">
+              <div class="card-image img-custom">
+                  <a href="{{ url_for("book_view", book_id=book._id) }}">
+                      <img src="{{ book.book_cover_url }}" class="img-custom">
+                  </a>
+              </div>
+              <div class="card-content">
+                  <span class="card-title"><a href="{{ url_for("book_view", book_id=book._id) }}" class="deep-purple-text text-darken-1">{{ book.book_title }}</a></span>
+                  <span class="card-title">{{ book.book_author_name }}</span>
+                  <div class="row">
+                    <div class="col s12 m6">
+                      <button type="submit" id="edit_book" name="edit_book" class="col s12 btn-small deep-purple darken-1 text-shadow">
+                          EDIT
+                      </button>
+                    </div>
+                    <div class="col s12 m6">
+                      <button type="submit" id="delete_book" name="delete_book" class="col s12 btn-small deep-purple darken-1 text-shadow">
+                          DELETE
+                      </button>
+                    </div>  
+                  </div>
+              </div>
+          </div>
       </div>
+      {% endfor %}
   </div>
-
+      <!-- Reviews added by user --> 
+    <h5 class="header deep-purple-text text-darken-4">Reviews added</h5>         
+    {% for review in reviews %}
+    <div class="row">
+        <div class="col s12">
+            <div class="card horizontal">
+                <div class="card-image">
+                    <img src="{{ data_template.img_url }}">
+                </div>
+                <div class="card-stacked">
+                  <div class="card-content">
+                     <h5>{{ data_template.username }}</h5> 
+                     <h6 class="deep-purple-text text-darken-4">Book name: {{ review.book_title }}</h6><hr>  
+                    <p class="deep-purple-text text-darken-4">Review: </p><p>{{ review.review_text }}</p>
+                    <div class="row">
+                      <div class="col s12 m2">
+                        <a href="{{ url_for('edit_review', book_id=review.book_id) }}" class="col s12 btn-small deep-purple darken-1 text-shadow">
+                          EDIT
+                        </a>
+                      </div>
+                      <div class="col s12 m2">
+                        <a href="{{ url_for('delete_review', book_id=review.book_id) }}" class="col s12 btn-small deep-purple darken-1 text-shadow">
+                          DELETE
+                        </a>
+                      </div>  
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 {% endblock %}
