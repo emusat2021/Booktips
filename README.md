@@ -323,3 +323,9 @@ Click on **Open app** in the right corner of your Heroku account. The app wil op
 - My husband Bogdan Musat and son David Musat for their immense support, patience and love!
 - All friends and family that took the time to test this for me.
 
+<span id="Disclaimer"></span>
+
+<h1>8. Disclaimer</h1>
+This project is for educational use only. 
+
+<a href="#booktips">Back to top!</a>
