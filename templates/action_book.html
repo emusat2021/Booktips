@@ -1,34 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
-<h3 class="center-align deep-purple-text text-darken-4"> Add Book</h3>
+<h3 class="center-align deep-purple-text text-darken-4">
+{% if source_route == "add" %}  
+Add Book
+{% endif %}
+{% if source_route == "edit" %}
+Edit Book
+{% endif %}
+</h3>
     <div class="row">
-        <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('add_book') }}"> 
+        {% if source_route == "add" %}
+        <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('add_book') }}">
+        {% endif %}
+        {% if source_route == "edit" %}
+        <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('edit_book', book_id=books_j2._id) }}">
+        {% endif %}   
             <div class="card-panel">
               <!-- picture url -->
               <div class="row">
                 <div class="input-field col s6">
-                  <input id="book_cover_url" type="text" name="book_cover_url" value="">
+                  <input id="book_cover_url" type="text" name="book_cover_url" value="{{ books_j2['book_cover_url'] }}">
                   <label for="book_cover_url">Picture URL</label>
                 </div>
               </div>
                 <!-- book title -->
               <div class="row">
                 <div class="input-field col s6">
-                  <input id="book_title" name="book_title" type="text" class="validate" value="" required>
+                  <input id="book_title" name="book_title" type="text" class="validate" value="{{ books_j2['book_title'] }}" required>
                   <label for="book_title">Book Title</label>
                 </div>
               </div>
               <!-- author name -->
               <div class="row">
                 <div class="input-field col s6">
-                  <input id="book_author_name" name="book_author_name" type="text" class="validate" value="" required>
+                  <input id="book_author_name" name="book_author_name" type="text" class="validate" value="{{ books_j2['book_author_name'] }}" required>
                   <label for="book_author_name">Author Name</label>
                 </div>
               </div>
               <!-- ISBN -->
               <div class="row">
                 <div class="input-field col s6">
-                  <input id="book_isbn" name="book_isbn" type="text" class="validate" value="">
+                  <input id="book_isbn" name="book_isbn" type="text" class="validate" value="{{ books_j2['book_isbn'] }}">
                   <label for="book_isbn">ISBN (optional) </label>
                 </div>
               </div>
@@ -36,7 +48,7 @@
                 <div class="row">
                   <div class="col s12">
                     <div class="input-field col s12">
-                      <textarea id="book_description" name="book_description" class="materialize-textarea" required></textarea>
+                      <textarea id="book_description" name="book_description" class="materialize-textarea" required>{{ books_j2['book_description'] }}</textarea>
                       <label for="book_description">Description</label>
                     </div>
                   </div>
@@ -45,15 +57,19 @@
                 <div class="row">
                   <div class="col s12 center-align">
                     <!-- cancel button -->
+                    {% if source_route == "add" %}
                     <button type="submit" id="add" name="add" class="btn-large deep-purple darken-4 text-shadow">
                       Add <i class="fas fa-plus right"></i>
                     </button>
-                    <a href="{{ url_for('get_books') }}" class="btn-large light-blue darken-4 text-shadow">
-                      Reset
-                    </a>
-                    <a href="{{ url_for('get_books') }}" class="btn-large red text-shadow">
-                      Delete <i class="fas fa-times-circle right"></i>
-                    </a>
+                    {% endif %}
+                    {% if source_route == "edit" %}
+                    <button type="submit" id="edit" name="edit" class="btn-large deep-purple darken-4 text-shadow">
+                      SAVE <i class="fas fa-save right"></i>
+                    </button>
+                    {% endif %}
+                    <button type="reset" id="reset" name="reset" class="btn-large light-blue darken-4 text-shadow">
+                      RESET
+                    </button>
                   </div>
                 </div>
       </form>
