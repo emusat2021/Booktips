@@ -20,4 +20,10 @@ main {
   flex: 1 0 auto;
 }
 
+/* Media Queries */
+@media only screen and (min-width: 768px) {
+  .img-custom {
+    width: 50%;
+    height: auto;
+  }
 }
