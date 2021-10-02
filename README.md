@@ -7,6 +7,27 @@ It’s a fun and interactive way to geek out over your favorite reads and discov
 
 The live website of [**Book Tips**](https://booktips-em.herokuapp.com/) can be viewed [here](https://booktips-em.herokuapp.com/)
 
+---
+
+## Index 
+
+- <a href="#ux">1. User experience (UX)</a>
+  - <a href="#ux-goals">1.1. Project goals</a>
+  - <a href="#ux-stories">1.2 User stories</a>
+  - <a href="#ux-design">1.3 Design</a>
+  - <a href="#ux-architecture">1.4 Information architecture</a>
+  - <a href="#ux-mockup">1.5 Mockup designs</a>
+- <a href="#features">2. Features</a>
+  - <a href="#features-existing">2.1 Existing features</a>
+  - <a href="#features-future">2.2 Features left to implement in the future</a>
+- <a href="#technologies">3. Technologies used</a>
+- <a href="#testing">4. Testing</a>
+- <a href="#deployment">5. Deployment</a>
+- <a href="#credits">6. Credits</a>
+- <a href="#Acknowledge">7. Acknowledge</a>
+- <a href="#Acknowledge">8. Disclaimer</a>
+
+---
 
 <span id="ux"></span>
 
