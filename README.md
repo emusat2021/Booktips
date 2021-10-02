@@ -301,3 +301,17 @@ Click on **Open app** in the right corner of your Heroku account. The app wil op
 
 <span id="credits"></span>
 
+<h1>6. Credits</h1>
+
+#### Content
+- Text in Home page - [Reedsy](https://reedsy.com/discovery/blog/book-review-sites)
+- Text in Home page - [Bookpage](https://bookpage.com/)
+
+#### Media 
+- Books images and descriptions - [OpenLibrary](https://openlibrary.org).
+
+#### Code
+- [Mini Project | Putting It All Together_Tim Nelson_CodeInstitute](https://github.com/Code-Institute-Solutions/TaskManagerAuth)
+- [Stack Overflow](https://stackoverflow.com/)
+- [Materialize](https://materialize.com/)
+
