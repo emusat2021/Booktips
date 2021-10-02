@@ -73,13 +73,15 @@ def add_book():
     if session.get("user"):
         if request.method == "POST":
             # collect data from form and build document in collection books in MongoDB
+            user_id = mongo.db.users.find_one(
+                {"username": session["user"]})["_id"]
             book_data = {
                 "book_title": request.form.get("book_title"),
                 "book_author_name": request.form.get("book_author_name"),
                 "book_cover_url": request.form.get("book_cover_url"),
                 "book_isbn": request.form.get("book_isbn"),
                 "book_description": request.form.get("book_description"),
-                "user_id":  request.form.get("book_user_id")
+                "user_id": user_id,
             }
             # insert the document into the database
             mongo.db.books.insert_one(book_data)
