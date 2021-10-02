@@ -59,7 +59,9 @@
                   </div>
                   
                 </div>
+              </form>
                 <div class="row">
+                  <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('delete_profile') }}">
                   <div class="col s12 m6">
                     <button type="submit" id="profile_delete" name="profile_delete" class="col s12 btn-small deep-purple darken-4 text-shadow">
                         Delete Account <i class="material-icons">delete</i>
