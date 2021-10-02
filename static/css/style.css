@@ -1,3 +1,14 @@
+ /* profile view style*/
+ .custom-italic {
+  font-style: italic;
+ }
+ 
+ /* img home page */
+.img-custom {
+    width: 70%;
+    height: auto;
+  }
+
 /* footer materialize */
 body {
   display: flex;
