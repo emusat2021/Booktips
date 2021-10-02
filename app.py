@@ -88,7 +88,14 @@ def add_book():
             return redirect(url_for("get_books"))
 
         if request.method == "GET":
-            return render_template("action_book.html", book=id)
+            books_db = {
+                "book_title": "",
+                "book_author_name": "",
+                "book_cover_url": "",
+                "book_isbn": "",
+                "book_description": "",
+            }
+            return render_template("action_book.html", books_j2=books_db, source_route="add")
 
     flash("You must be authenticated in order to add books!")
     return redirect(url_for("get_books"))
