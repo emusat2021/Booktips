@@ -3,39 +3,25 @@
 {% if book %}
 <h3 class="deep-purple-text text-darken-4 center-align">Book details</h3>
 <div class="row">
-    <div class="col s12">
-        <div class="card horizontal">
-            <div class="card-image">
-                <img src="{{ book.book_cover_url }}">
-            </div>
-            <div class="card-stacked">
-                <div class="card-content">
-                    <h4 class="header">{{ book.book_title }}</h4>
-                    <h5 class="header">by {{ book.book_author_name }}</h5>
-                    <br>
-                    {% if book.book_isbn %}
-                    ISBN: {{ book.book_isbn }} <br>
-                    {% endif %}
-                    <div class="row">
-                        <div class="col s12">
-                            Total reviews
-                        </div>
-                    </div>
-                    <hr>
-                    <p>
-                        {% if book.book_description %}
-                        {{ book.book_description }}
-                        {% else %}
-                        This book does not have a description yet.
-                        {% endif %}
-                    </p>
-
-                </div>
-                <div class="card-action">
-                    <a href="{{ url_for('add_review', book_id=book._id) }}" class="col s12 m3 btn-small deep-purple darken-1 text-shadow">
-                     Write a review!
-                    </a>
-                </div>
+    <div class="col s12 m6 l4">
+        <div class="card">
+            <div class="card-image img-custom">
+                <img src="{{ book.book_cover_url }}" class="img-custom">
+            </div>    
+            <div class="card-content">
+                <p  class="deep-purple-text text-darken-1">{{ book.book_title }}</p>
+                <p>by {{ book.book_author_name }}</p><hr>
+                {% if book.book_isbn %}
+                <p>ISBN: {{ book.book_isbn }}</p>
+                {% endif %}
+                {% if book.book_description %}
+                <p><span class="deep-purple-text text-lightn-5 custom-italic">Book Description:</span>{{ book.book_description }}</p>
+                {% else %}
+                <p>This book does not have a description yet.<p>
+                {% endif %}
+                <a href="{{ url_for('add_review', book_id=book._id) }}" class="col s12 m6 btn-small deep-purple darken-1 text-shadow">
+                    Write a review!
+                </a>
             </div>
         </div>
     </div>
