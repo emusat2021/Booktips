@@ -99,3 +99,20 @@ Mockup designs are made with [Balsamiq.](https://www.balsamiq.com/)
 
 Initial wireframes with some comments for both desktop and mobile devices can be found [here](https://github.com/emusat2021/Booktips/tree/main/wireframes).
 
+<span id="features"></span>
+
+<h1>2. Features</h1>
+
+<span id="features-existing"></span>
+
+### 2.1 Existing features 
+
+#### 1. Design 
+- An attractive and simple layout with consistency.
+- Simple navigation throughout the website by using the navigation bar. 
+- Showing added books simple and clearly
+
+#### 2. General 
+- The home page shows an introductory text followed by a search box. Underneath there is a list of all books.
+- Unregistered users are able to register on the "Register" page
+
