@@ -1,10 +1,9 @@
 import os
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
-from flask import (
-    Flask, flash, render_template,
-    redirect, request, session, url_for)
+from flask import Flask, flash, render_template, redirect, request, session, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
+
 if os.path.exists("env.py"):
     import env
 
@@ -30,34 +29,41 @@ def get_books():
     books = list(mongo.db.books.find().sort("book_title", 1))
     return render_template("books.html", books=books)
 
+
 @app.route("/book/view/<book_id>")
 def book_view(book_id):
     # check if the given book id is valid mongodb object id
     if ObjectId.is_valid(book_id):
-        book = mongo.db.books.find_one(
-            {"_id": ObjectId(book_id)})
+        book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
 
         # read/search in MongoDB for all reviews for a specific book id
-        reviews = list(
-            mongo.db.reviews.find({"book_id": ObjectId(book_id)})
-        )
+        reviews = list(mongo.db.reviews.find({"book_id": ObjectId(book_id)}))
         # idea taken from https://stackoverflow.com/questions/14071038/add-an-element-in-each-dictionary-of-a-list-list-comprehension
         # add 2 new keys to each dictionary in list reviews
         for review in reviews:
 
-            img_url_em = mongo.db.profiles.find_one({"user_id": review["user_id"]})["img_url"]
-            username_em = mongo.db.users.find_one({"_id": review["user_id"]})["username"]
+            img_url_em = mongo.db.profiles.find_one({"user_id": review["user_id"]})[
+                "img_url"
+            ]
+            username_em = mongo.db.users.find_one({"_id": review["user_id"]})[
+                "username"
+            ]
 
-            review.update({
-                "img_url": img_url_em,
-                "username": username_em,
-            })
-
+            review.update(
+                {
+                    "img_url": img_url_em,
+                    "username": username_em,
+                }
+            )
 
     else:
         book = None
 
-    return render_template("book_view.html", book=book, reviews=reviews, )
+    return render_template(
+        "book_view.html",
+        book=book,
+        reviews=reviews,
+    )
 
 
 @app.route("/add_book", methods=["GET", "POST"])
@@ -73,8 +79,7 @@ def add_book():
     if session.get("user"):
         if request.method == "POST":
             # collect data from form and build document in collection books in MongoDB
-            user_id = mongo.db.users.find_one(
-                {"username": session["user"]})["_id"]
+            user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
             book_data = {
                 "book_title": request.form.get("book_title"),
                 "book_author_name": request.form.get("book_author_name"),
@@ -95,7 +100,9 @@ def add_book():
                 "book_isbn": "",
                 "book_description": "",
             }
-            return render_template("action_book.html", books_j2=books_db, source_route="add")
+            return render_template(
+                "action_book.html", books_j2=books_db, source_route="add"
+            )
 
     flash("You must be authenticated in order to add books!")
     return redirect(url_for("get_books"))
@@ -104,45 +111,53 @@ def add_book():
 @app.route("/edit_book/<book_id>", methods=["GET", "POST"])
 def edit_book(book_id):
     if session.get("user"):
-        user_id = mongo.db.users.find_one(
-            {"username": session["user"]})["_id"]
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
         if request.method == "GET":
             # verify if the given book id is in the database
-            books_db = mongo.db.books.find_one({
-                "_id": ObjectId(book_id),
-            })
+            books_db = mongo.db.books.find_one(
+                {
+                    "_id": ObjectId(book_id),
+                }
+            )
             # if not then redirect to home
             if not books_db:
                 flash("This book can not be found!")
                 return redirect(url_for("get_books"))
             # verify if the given book id was added by the current user
-            books_db = mongo.db.books.find_one({
-                "_id": ObjectId(book_id),
-                "user_id": user_id,
-            })
+            books_db = mongo.db.books.find_one(
+                {
+                    "_id": ObjectId(book_id),
+                    "user_id": user_id,
+                }
+            )
             # if not then redirect to profile view
             if not books_db:
                 flash("You are not allowed to edit this book!")
                 return redirect(url_for("profile_view", username=session["user"]))
-            return render_template("action_book.html", books_j2=books_db, source_route="edit")
+            return render_template(
+                "action_book.html", books_j2=books_db, source_route="edit"
+            )
 
         if request.method == "POST":
 
             # object to be put in MongoDB (must be same structure of a document in collection books)
             update_user_books = {
-                'book_title': request.form.get("book_title"),
-                'book_author_name': request.form.get("book_author_name"),
-                'book_cover_url': request.form.get("book_cover_url"),
-                'book_isbn': request.form.get("book_isbn"),
-                'book_description': request.form.get("book_description"),
-                'user_id': user_id,
+                "book_title": request.form.get("book_title"),
+                "book_author_name": request.form.get("book_author_name"),
+                "book_cover_url": request.form.get("book_cover_url"),
+                "book_isbn": request.form.get("book_isbn"),
+                "book_description": request.form.get("book_description"),
+                "user_id": user_id,
             }
             # update only one document in the database (the one that is filtered)
-            result = mongo.db.books.update({
-                "user_id": user_id,
-                "_id": ObjectId(book_id),
-            }, update_user_books)
+            result = mongo.db.books.update(
+                {
+                    "user_id": user_id,
+                    "_id": ObjectId(book_id),
+                },
+                update_user_books,
+            )
             print(result)
             return redirect(url_for("profile", username=session["user"]))
 
@@ -159,13 +174,14 @@ def delete_book(book_id):
     Then delete.
     """
     if session.get("user"):
-        user_id = mongo.db.users.find_one(
-            {"username": session["user"]})["_id"]
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
         # filter on book id and specific user id
-        mongo.db.books.remove({
-            "_id": ObjectId(book_id),
-            "user_id": user_id,
-            })
+        mongo.db.books.remove(
+            {
+                "_id": ObjectId(book_id),
+                "user_id": user_id,
+            }
+        )
 
         flash("Book Successfully Deleted")
         return redirect(url_for("profile", username=session["user"]))
@@ -177,28 +193,28 @@ def delete_book(book_id):
 @app.route("/add_review/<book_id>", methods=["GET", "POST"])
 def add_review(book_id):
     if session.get("user"):
-        user_id = mongo.db.users.find_one(
-            {"username": session["user"]})["_id"]
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
         # search for a review of the current book and the current user
-        review_db = mongo.db.reviews.find_one({
-            "book_id": ObjectId(book_id),
-            "user_id": user_id,
-        })
+        review_db = mongo.db.reviews.find_one(
+            {
+                "book_id": ObjectId(book_id),
+                "user_id": user_id,
+            }
+        )
         # if user has already review on the respective book then rediret to edit
         if review_db:
             return redirect(url_for("edit_review", book_id=book_id))
 
-
         if request.method == "GET":
             # read book details from DB
-            book = mongo.db.books.find_one(
-                {"_id": ObjectId(book_id)})
+            book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
 
-            return render_template("action_review.html", book=book, review_j2=review_db, source_route="add")
+            return render_template(
+                "action_review.html", book=book, review_j2=review_db, source_route="add"
+            )
 
         if request.method == "POST":
-
 
             # object to be put in MongoDB(structure of a document in collection reviews)
             user_review = {
@@ -218,21 +234,26 @@ def add_review(book_id):
 @app.route("/edit_review/<book_id>", methods=["GET", "POST"])
 def edit_review(book_id):
     if session.get("user"):
-        user_id = mongo.db.users.find_one(
-            {"username": session["user"]})["_id"]
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
         if request.method == "GET":
             # read book details from DB
-            book = mongo.db.books.find_one(
-                {"_id": ObjectId(book_id)})
+            book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
 
             # search using a filter for a review of the current book and the current user
-            review_db = mongo.db.reviews.find_one({
-                "book_id": ObjectId(book_id),
-                "user_id": user_id,
-            })
+            review_db = mongo.db.reviews.find_one(
+                {
+                    "book_id": ObjectId(book_id),
+                    "user_id": user_id,
+                }
+            )
 
-            return render_template("action_review.html", book=book, review_j2=review_db, source_route="edit")
+            return render_template(
+                "action_review.html",
+                book=book,
+                review_j2=review_db,
+                source_route="edit",
+            )
 
         if request.method == "POST":
 
@@ -243,10 +264,13 @@ def edit_review(book_id):
                 "book_id": ObjectId(book_id),
             }
             # update the document into the database
-            mongo.db.reviews.update({
-                "user_id": user_id,
-                "book_id": ObjectId(book_id),
-            }, update_user_review)
+            mongo.db.reviews.update(
+                {
+                    "user_id": user_id,
+                    "book_id": ObjectId(book_id),
+                },
+                update_user_review,
+            )
             return redirect(url_for("book_view", book_id=book_id))
 
     else:
@@ -262,13 +286,14 @@ def delete_review(book_id):
     Then delete.
     """
     if session.get("user"):
-        user_id = mongo.db.users.find_one(
-            {"username": session["user"]})["_id"]
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
         # filter on book id and specific user id
-        mongo.db.reviews.remove({
-            "book_id": ObjectId(book_id),
-            "user_id": user_id,
-            })
+        mongo.db.reviews.remove(
+            {
+                "book_id": ObjectId(book_id),
+                "user_id": user_id,
+            }
+        )
 
         flash("Review Successfully Deleted")
         return redirect(url_for("profile", username=session["user"]))
@@ -290,7 +315,8 @@ def search():
 def register():
     if request.method == "POST":
         existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
+            {"username": request.form.get("username").lower()}
+        )
         if existing_user:
             flash("Username already exists")
             return redirect(url_for("register"))
@@ -309,7 +335,8 @@ def register():
 
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})["_id"]
+            {"username": request.form.get("username").lower()}
+        )["_id"]
         # build document to insert into MongoDB
         profile_data = {
             "user_email": "",
@@ -332,12 +359,14 @@ def register():
 def login():
     if request.method == "POST":
         existing_user = mongo.db.users.find_one(
-            {"username": request.form.get("username").lower()})
+            {"username": request.form.get("username").lower()}
+        )
 
         if existing_user:
             # ensure hashed password matches user input
             if check_password_hash(
-                existing_user["password"], request.form.get("password")):
+                existing_user["password"], request.form.get("password")
+            ):
                 session["user"] = request.form.get("username").lower()
                 flash("Welcome, {}".format(request.form.get("username")))
                 return redirect(url_for("get_books"))
@@ -358,8 +387,7 @@ def login():
 def profile():
     if session.get("user"):
         # retrieve user id from the DB
-        user_id = mongo.db.users.find_one(
-            {"username": session["user"]})["_id"]
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
         # edit profile action save
         if request.method == "POST":
             # update the DB
@@ -377,8 +405,7 @@ def profile():
             flash("Your profile has been successfully updated!")
         # GET method
         # retrieve user profile from the DB
-        user_profile = mongo.db.profiles.find_one(
-            {"user_id": user_id})
+        user_profile = mongo.db.profiles.find_one({"user_id": user_id})
 
         data_template = {
             "user_email": user_profile["user_email"],
@@ -396,11 +423,14 @@ def profile():
         for review in reviews:
             book_info_em = mongo.db.books.find_one({"_id": review["book_id"]})
 
-            review.update({
-                "book_title": book_info_em["book_title"],
-            })
-        return render_template("profile.html", data_template=data_template, books=books, reviews=reviews)
-
+            review.update(
+                {
+                    "book_title": book_info_em["book_title"],
+                }
+            )
+        return render_template(
+            "profile.html", data_template=data_template, books=books, reviews=reviews
+        )
 
     return redirect(url_for("login"))
 
@@ -409,10 +439,8 @@ def profile():
 def profile_edit():
     if session.get("user"):
         # retrieve user id from the DB
-        user_id = mongo.db.users.find_one(
-            {"username": session["user"]})["_id"]
-        user_profile = mongo.db.profiles.find_one(
-            {"user_id": user_id})
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
+        user_profile = mongo.db.profiles.find_one({"user_id": user_id})
 
         data_template = {
             "user_email": user_profile["user_email"],
@@ -431,20 +459,27 @@ def profile_edit():
 def delete_profile():
     if session.get("user"):
         # retrieve user id from the DB
-        user_id = mongo.db.users.find_one(
-            {"username": session["user"]})["_id"]
-        mongo.db.reviews.remove({
-            "user_id": user_id,
-        })
-        mongo.db.books.remove({
-            "user_id": user_id,
-        })
-        mongo.db.profiles.remove({
-            "user_id": user_id,
-        })
-        mongo.db.users.remove({
-            "_id": user_id,
-        })
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
+        mongo.db.reviews.remove(
+            {
+                "user_id": user_id,
+            }
+        )
+        mongo.db.books.remove(
+            {
+                "user_id": user_id,
+            }
+        )
+        mongo.db.profiles.remove(
+            {
+                "user_id": user_id,
+            }
+        )
+        mongo.db.users.remove(
+            {
+                "_id": user_id,
+            }
+        )
 
         flash("Your account has been deleted!")
         session.pop("user", None)
@@ -452,7 +487,6 @@ def delete_profile():
     else:
         flash("You must be authenticated in order to delete your account!")
         return redirect(url_for("get_books"))
-
 
 
 @app.route("/logout")
@@ -463,6 +497,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(host=os.environ.get("IP"),
-        port=int(os.environ.get("PORT")),
-        debug=True)
+    app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=True)
