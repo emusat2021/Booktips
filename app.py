@@ -354,12 +354,12 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/profile/view/<username>", methods=["GET", "POST"])
-def profile(username):
+@app.route("/profile/view", methods=["GET", "POST"])
+def profile():
     if session.get("user"):
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one(
-            {"username": username})["_id"]
+            {"username": session["user"]})["_id"]
         # edit profile action save
         if request.method == "POST":
             # update the DB
@@ -385,7 +385,7 @@ def profile(username):
             "user_firstname": user_profile["user_firstname"],
             "user_lastname": user_profile["user_lastname"],
             "img_url": user_profile["img_url"],
-            "username": username,
+            "username": session["user"],
         }
         # find all books created by the current user
         books = list(mongo.db.books.find({"user_id": user_id}).sort("book_title", 1))
