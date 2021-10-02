@@ -189,6 +189,9 @@ Initial wireframes with some comments for both desktop and mobile devices can be
     - The PEP8 validator is used to check whether there were any errors in the Python code.
 - [Black](https://pypi.org/project/black/)
     - Black is the uncompromising Python code formatter.
+<span id="testing"></span>
+
+<h1>4. Testing</h1>
 
 <span id="deployment"></span>
 
