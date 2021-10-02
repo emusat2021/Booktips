@@ -4,7 +4,7 @@ from bson.objectid import ObjectId
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
-from werkzeug.security import generate_password_hash, check_password_hash    
+from werkzeug.security import generate_password_hash, check_password_hash
 if os.path.exists("env.py"):
     import env
 
@@ -36,7 +36,7 @@ def book_view(book_id):
     if ObjectId.is_valid(book_id):
         book = mongo.db.books.find_one(
             {"_id": ObjectId(book_id)})
-    
+
         # read/search in MongoDB for all reviews for a specific book id
         reviews = list(
             mongo.db.reviews.find({"book_id": ObjectId(book_id)})
@@ -66,7 +66,7 @@ def add_book():
     This route adds a new book in the database.
     It has two methods: GET and POST.
     GET method displays a form for user to fill in.
-    POST method adds the book in the database and then 
+    POST method adds the book in the database and then
     redirects user to home page.
     This function can only be used by an authenticated user.
     """
@@ -171,7 +171,7 @@ def delete_book(book_id):
         return redirect(url_for("profile", username=session["user"]))
     else:
         flash("You must be authenticated in order to delete books!")
-        return redirect(url_for("get_books"))   
+        return redirect(url_for("get_books"))
 
 
 @app.route("/add_review/<book_id>", methods=["GET", "POST"])
@@ -179,7 +179,7 @@ def add_review(book_id):
     if session.get("user"):
         user_id = mongo.db.users.find_one(
             {"username": session["user"]})["_id"]
-        
+
         # search for a review of the current book and the current user
         review_db = mongo.db.reviews.find_one({
             "book_id": ObjectId(book_id),
@@ -194,7 +194,7 @@ def add_review(book_id):
             # read book details from DB
             book = mongo.db.books.find_one(
                 {"_id": ObjectId(book_id)})
-        
+
             return render_template("action_review.html", book=book, review_j2=review_db, source_route="add")
 
         if request.method == "POST":
@@ -225,13 +225,13 @@ def edit_review(book_id):
             # read book details from DB
             book = mongo.db.books.find_one(
                 {"_id": ObjectId(book_id)})
-            
+
             # search using a filter for a review of the current book and the current user
             review_db = mongo.db.reviews.find_one({
                 "book_id": ObjectId(book_id),
                 "user_id": user_id,
             })
-            
+
             return render_template("action_review.html", book=book, review_j2=review_db, source_route="edit")
 
         if request.method == "POST":
@@ -274,7 +274,7 @@ def delete_review(book_id):
         return redirect(url_for("profile", username=session["user"]))
     else:
         flash("You must be authenticated in order to delete reviews!")
-        return redirect(url_for("get_books"))   
+        return redirect(url_for("get_books"))
 
 
 @app.route("/search", methods=["GET", "POST"])
@@ -400,7 +400,7 @@ def profile():
                 "book_title": book_info_em["book_title"],
             })
         return render_template("profile.html", data_template=data_template, books=books, reviews=reviews)
-        
+
 
     return redirect(url_for("login"))
 
@@ -445,13 +445,13 @@ def delete_profile():
         mongo.db.users.remove({
             "_id": user_id,
         })
-    
+
         flash("Your account has been deleted!")
         session.pop("user", None)
         return redirect(url_for("get_books"))
     else:
         flash("You must be authenticated in order to delete your account!")
-        return redirect(url_for("get_books"))   
+        return redirect(url_for("get_books"))
 
 
 
@@ -460,10 +460,9 @@ def logout():
     flash("You have been logged out")
     session.pop("user", None)
     return redirect(url_for("get_books"))
-    
-    
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
         port=int(os.environ.get("PORT")),
         debug=True)
-        
