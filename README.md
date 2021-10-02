@@ -141,3 +141,51 @@ Initial wireframes with some comments for both desktop and mobile devices can be
 
 <h1>3. Technologies used</h1>
 
+#### Languages used
+- [HTML5](https://en.wikipedia.org/wiki/HTML5)
+    - HTML5 provides the structure and the content for my project. 
+- [CSS3](https://en.wikipedia.org/wiki/Cascading_Style_Sheets)
+    - CSS3 provides the style of the HTML5 elements.
+- [jQuery](https://jquery.com/)
+    - jQuery used as the JavaScript functionality.
+- [Python](https://www.python.org/)
+    - Python provides the backend of the project.
+
+#### Frameworks, libraries & Other
+- [Gitpod](https://www.gitpod.io/) 
+    - The GitPod is used to develop the project.
+- [Git](https://git-scm.com/)
+    - The Git was used for version control to commit to Git and push to GitHub.
+- [GitHub](https://github.com/)
+    - The GitHub is used to host the project.
+- [Google Fonts](https://fonts.google.com/)
+    - Google Fonts is used to provide the font roboto for all the text that is used in the project. 
+- [Balsamiq](https://www.balsamiq.com/)
+    - Figma is used to create the mockup designs for the project.
+- [Materialize](https://materializecss.com/)
+    - Materialize is used for the design framework.
+- [MongoDB](https://www.mongodb.com/1)
+    - MongoDB is the fully managed cloud database service used for the project.
+- [Heroku](https://dashboard.heroku.com/)
+    - Heroki is the cloud platform to deploying the app.
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+    - Flask is the web framework used to provide libraries, tools and technologies for the app.
+- [Jinja](https://jinja.palletsprojects.com/en/2.11.x/)
+    - Jinja is used for Python templating
+- [Werkzeug](https://werkzeug.palletsprojects.com/en/1.0.x/)
+    - Werkzeug is used for password hashing and authentication and autohorization.
+
+#### Testing tools used 
+- [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/open) is used to detect problems and test responsiveness.
+- [Autoprefixer](https://autoprefixer.github.io/)
+    - Autoprefixer is used to parse the CSS and to add vendor prefixes to CSS rules. 
+- [W3C Markup Validation Service](https://validator.w3.org/)
+    - The W3C Markup Validation Service is used to check whether there were any errors in the HTML5 code. 
+- [W3C CSS validator](https://jigsaw.w3.org/css-validator/)
+    - The W3C CSS validator is used to check whether there were any errors in the CSS3 code.
+- [JShint](https://jshint.com/)
+    - JShint is a JavaScript validator that is used to check whether there were any errors in the JavaScript code. 
+- [PEP8](http://pep8online.com/)
+    - The PEP8 validator is used to check whether there were any errors in the Python code.
+- [Black](https://pypi.org/project/black/)
+    - Black is the uncompromising Python code formatter.
