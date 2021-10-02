@@ -315,3 +315,11 @@ Click on **Open app** in the right corner of your Heroku account. The app wil op
 - [Stack Overflow](https://stackoverflow.com/)
 - [Materialize](https://materialize.com/)
 
+<span id="Acknowledge"></span>
+
+<h1>7. Acknowledge</h1>
+
+- I received support for this project from my mentor <a href="https://www.codeinstitute.net/" target="_blank">[Precious Ijege](https://www.linkedin.com/in/precious-ijege-908a00168/?originalSubdomain=ng) at [Code Institute](https://codeinstitute.net)</a>.
+- My husband Bogdan Musat and son David Musat for their immense support, patience and love!
+- All friends and family that took the time to test this for me.
+
