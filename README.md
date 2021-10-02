@@ -189,3 +189,115 @@ Initial wireframes with some comments for both desktop and mobile devices can be
     - The PEP8 validator is used to check whether there were any errors in the Python code.
 - [Black](https://pypi.org/project/black/)
     - Black is the uncompromising Python code formatter.
+
+<span id="deployment"></span>
+
+<h1>5. Deployment</h1>
+
+#### Requirements 
+- Python3 
+- Github account 
+- MongoDB account 
+- Heroku account
+
+#### Clone the project 
+To make a local clone, follow the following steps. 
+1. Log in to GitHub and go to the repository. 
+2. Click on the green button with the text **“Code”.**
+3. Click on **“Open with GitHub Desktop”** and follow the prompts in the GitHub Desktop Application or follow the instructions from **[this link](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop)** to see how to clone the repository in other ways. 
+
+#### Working with the local copy
+1. Install all the requirements: Go to the workspace of your local copy. In the terminal window of your IDE type: **pip3 install -r requirements.txt**.
+2. Create a database in MongoDB  
+    - Signup or login to your MongoDB account.
+    - Create a new Database called "Booktips" in [MongoDB Atlas](https://www.mongodb.com/). .
+    - In the "Booktips" database create the following four collections: **books, profiles, reviews, users.**
+        ###### Books
+        ```
+        {
+            _id: <ObjectId>,
+            book_title: <String>,
+            book_author_name: <String>,
+            book_cover_url: <String>,
+            book_isbn: <String>,
+            book_description: <String>,
+            user_id: <ObjectId>,
+        }
+        ```
+        ###### Profiles
+        ```
+        {
+            _id: <ObjectId>,
+            user_email: <String>,
+            user_firstname: <String>,
+            user_lastname: <String>,
+            img_url: <String>,
+            user_id: <ObjectId>,
+        }
+        ```
+        ###### Reviews
+        ```
+        {
+            _id: <ObjectId>,
+            review_text: <String>,
+            user_id: <ObjectId>,
+            book_id: <ObjectId>,
+        }
+        ```
+        ###### Users
+        ```
+        {
+            _id: <ObjectId>,
+            username: <String>,
+            password: <String>,
+        }
+        ```
+    - You need to manually create indexes in books collection, for the *book_title* and *book_author_name*, otherwise you will not be able to perform a search in the database within those fields.
+        ```
+        $ python3
+
+        from app import mongo
+        mongo.db.books.create_index([("book_title", "text"), ("book_author_name", "text")])
+        ```
+3. Create the environment variables 
+    - Create a .gitignore file in the root directory of the project.
+    - Add the env.py file in the .gitignore.
+    - Create the file env.py. This  will contain all the environment variables.
+    ```
+    import os
+    os.environ.setdefault("IP", "Added by developer")
+    os.environ.setdefault("PORT", "Added by developer")
+    os.environ.setdefault("SECRET_KEY", "Added by developer")
+    os.environ.setdefault("MONGO_URI", "Added by developer")
+    os.environ.setdefault("MONGO_DBNAME", "Added by developer")
+    ```
+4. Run the app: Open your terminal window in your IDE. Type python3 app.py and run the app.
+
+#### Heroku Deployment  
+1. Set up local workspace for Heroku 
+    - In terminal window of your IDE type: ```pip3 freeze -- local > requirements.txt.``` (Heroku detects this as a Python app. The reason that they've been able to detect Python is because we have a requirements.txt file)
+
+    - In terminal window of your IDE type: ```echo "python app.py" > Procfile``` (The file is needed for Heroku to know which file is needed as entry point.)
+1. Set up Heroku: create a Heroku account, create a new app and select your region. 
+2. Deployment method 'Github'
+    - Click on the **Connect to GitHub** section in the deploy tab in Heroku. 
+        - Search your repository to connect with it.
+        - When your repository appears click on **connect** to connect your repository with the Heroku. 
+    - Go to the settings app in Heroku and go to **Config Vars**. Click on **Reveal Config Vars**.
+        - Enter the variables contained in your env.py file. it is about: **IP, PORT, SECRET_KEY, MONGO_URI, MONGO_DBNAME**
+3. Push the requirements.txt and Procfile to the repository. 
+     ```
+    $ git add requirements.txt
+    $ git commit -m "Add requirements.txt"
+
+    $ git add Procfile 
+    $ git commit -m "Add Procfile"
+    ```
+4. Automatic deployment: Go to the deploy tab in Heroku and scroll down to **Automatic deployments**. Click on **Enable Automatic Deploys**. By **Manual deploy** click on **Deploy Branch**.
+
+Heroku will receive the code from Github and host the app using the required packages. 
+Click on **Open app** in the right corner of your Heroku account. The app wil open and the live link is available from the address bar. 
+
+
+<span id="credits"></span>
+
