@@ -116,3 +116,28 @@ Initial wireframes with some comments for both desktop and mobile devices can be
 - The home page shows an introductory text followed by a search box. Underneath there is a list of all books.
 - Unregistered users are able to register on the "Register" page
 
+#### 3. Books and Reviews
+- Books and reviews can be created, read, updated and deleted (CRUD) by the users. 
+- Users can search for Books using the search bar. 
+- Users have access to their profile, with an overview of all their added books and reviews. 
+
+#### 4. Register, login and logout 
+- An unregistered user can create a new account on the web application.
+- Registered users can login with their existing accounts. 
+- Registered users can easily log out.
+- If a user creates a new account, logs in or logs out, a flash message will appear as feedback for the user. 
+
+<span id="features-future"></span>
+
+### 2.2 Features left to implement in the future 
+- Adding votes. Users vote their favorite books and can see them on their profile page. 
+- Add categories for books. 
+- Instead of using URLs for the book covers, we could implement a new feature to upload the cover as an image. 
+- A book or a review should not be deleted by just one click. If someone clicks on the delete button, there will be a pop-up with a confirmation.
+- Add pagination for the list of books and the list of reviews
+- Add functionality for an Administrator account which is able to delete any book, review or profile
+- When the user is logged in, write the user's username on the navbar
+<span id="technologies"></span>
+
+<h1>3. Technologies used</h1>
+
