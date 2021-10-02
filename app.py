@@ -150,6 +150,30 @@ def edit_book(book_id):
         flash("You must be authenticated in order to edit books!")
         return redirect(url_for("get_books"))
 
+
+@app.route("/delete_book/<book_id>", methods=["POST"])
+def delete_book(book_id):
+    """
+    Delete book.
+    First we check user's authentication.
+    Then delete.
+    """
+    if session.get("user"):
+        user_id = mongo.db.users.find_one(
+            {"username": session["user"]})["_id"]
+        # filter on book id and specific user id
+        mongo.db.books.remove({
+            "_id": ObjectId(book_id),
+            "user_id": user_id,
+            })
+
+        flash("Book Successfully Deleted")
+        return redirect(url_for("profile", username=session["user"]))
+    else:
+        flash("You must be authenticated in order to delete books!")
+        return redirect(url_for("get_books"))   
+
+
 @app.route("/add_review/<book_id>", methods=["GET", "POST"])
 def add_review(book_id):
     if session.get("user"):
