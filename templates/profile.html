@@ -37,10 +37,10 @@
                   <span class="card-title">{{ book.book_author_name }}</span>
                   <div class="row">
                     <div class="col s12 m6">
-                      <button type="submit" id="edit_book" name="edit_book" class="col s12 btn-small deep-purple darken-1 text-shadow">
-                          EDIT
-                      </button>
-                    </div>
+                      <a href="{{ url_for('edit_book', book_id=book._id) }}" class="col s12 btn-small deep-purple darken-1 text-shadow">
+                        EDIT
+                      </a>
+                  </div>
                     <div class="col s12 m6">
                       <button type="submit" id="delete_book" name="delete_book" class="col s12 btn-small deep-purple darken-1 text-shadow">
                           DELETE
