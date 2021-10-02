@@ -423,11 +423,32 @@ def profile_edit(username):
     return render_template("profile_edit.html", data_template=data_template)
 
 
-@app.route("/profile/delete/<username>")
-def profile_delete(username):
-    flash("Your account has been deleted!")
-    session.pop("user", None)
-    return redirect(url_for("get_books"))
+@app.route("/delete/profile", methods=["POST"])
+def delete_profile():
+    if session.get("user"):
+        # retrieve user id from the DB
+        user_id = mongo.db.users.find_one(
+            {"username": session["user"]})["_id"]
+        mongo.db.reviews.remove({
+            "user_id": user_id,
+        })
+        mongo.db.books.remove({
+            "user_id": user_id,
+        })
+        mongo.db.profiles.remove({
+            "user_id": user_id,
+        })
+        mongo.db.users.remove({
+            "_id": user_id,
+        })
+    
+        flash("Your account has been deleted!")
+        session.pop("user", None)
+        return redirect(url_for("get_books"))
+    else:
+        flash("You must be authenticated in order to delete your account!")
+        return redirect(url_for("get_books"))   
+
 
 
 @app.route("/logout")
