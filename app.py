@@ -94,6 +94,55 @@ def add_book():
     return redirect(url_for("get_books"))
 
 
+@app.route("/edit_book/<book_id>", methods=["GET", "POST"])
+def edit_book(book_id):
+    if session.get("user"):
+        user_id = mongo.db.users.find_one(
+            {"username": session["user"]})["_id"]
+
+        if request.method == "GET":
+            # verify if the given book id is in the database
+            books_db = mongo.db.books.find_one({
+                "_id": ObjectId(book_id),
+            })
+            # if not then redirect to home
+            if not books_db:
+                flash("This book can not be found!")
+                return redirect(url_for("get_books"))
+            # verify if the given book id was added by the current user
+            books_db = mongo.db.books.find_one({
+                "_id": ObjectId(book_id),
+                "user_id": user_id,
+            })
+            # if not then redirect to profile view
+            if not books_db:
+                flash("You are not allowed to edit this book!")
+                return redirect(url_for("profile_view", username=session["user"]))
+            return render_template("action_book.html", books_j2=books_db, source_route="edit")
+
+        if request.method == "POST":
+
+            # object to be put in MongoDB (must be same structure of a document in collection books)
+            update_user_books = {
+                'book_title': request.form.get("book_title"),
+                'book_author_name': request.form.get("book_author_name"),
+                'book_cover_url': request.form.get("book_cover_url"),
+                'book_isbn': request.form.get("book_isbn"),
+                'book_description': request.form.get("book_description"),
+                'user_id': user_id,
+            }
+            # update only one document in the database (the one that is filtered)
+            result = mongo.db.books.update({
+                "user_id": user_id,
+                "_id": ObjectId(book_id),
+            }, update_user_books)
+            print(result)
+            return redirect(url_for("profile", username=session["user"]))
+
+    else:
+        flash("You must be authenticated in order to edit books!")
+        return redirect(url_for("get_books"))
+
 @app.route("/add_review/<book_id>", methods=["GET", "POST"])
 def add_review(book_id):
     if session.get("user"):
