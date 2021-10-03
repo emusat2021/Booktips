@@ -6,15 +6,13 @@
             <div class="card-panel">
               <div class="row valign-wrapper">
                 <div class="col s12">
-                  <img width="100" alt={{ data_template.username }} class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template.img_url }}"><br>
+                  <img width="100" class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template.img_url }}" alt="user profile picture"><br>
                   <!-- Edit profile -->         
-                  <a href="{{ url_for('profile_edit', username=data_template.username) }}" class="col s12 m6 btn-small deep-purple darken-1 text-shadow">EDIT PROFILE</a>
+                  <a href="{{ url_for('profile_edit') }}" class="col s12 m6 btn-small deep-purple darken-1 text-shadow">EDIT PROFILE</a>
                 </div>
                 <div class="col s10">
-                  <span class="black-text">
                     <h5 class="deep-purple-text text-darken-4">Full name: {{ data_template.user_firstname }} {{ data_template.user_lastname }}</h5>
                     <h5 class="deep-purple-text text-darken-4">Email: {{ data_template.user_email }}</h5>
-                    </span>
                 </div>
               </div>
             </div>
@@ -29,7 +27,7 @@
           <div class="card large">
               <div class="card-image img-custom">
                   <a href="{{ url_for("book_view", book_id=book._id) }}">
-                      <img src="{{ book.book_cover_url }}" class="img-custom">
+                      <img src="{{ book.book_cover_url }}" class="img-custom" alt="book cover">
                   </a>
               </div>
               <div class="card-content">
@@ -43,7 +41,7 @@
                   </div>
                     <div class="col s12 m6">
                       <form action="{{ url_for('delete_book', book_id=book._id) }}" method="POST">
-                        <button type="submit" id="delete_book" name="delete_book" class="col s12 btn-small deep-purple darken-1 text-shadow">
+                        <button type="submit" name="delete_book" class="col s12 btn-small deep-purple darken-1 text-shadow">
                             DELETE
                         </button>
                       </form>
@@ -61,7 +59,7 @@
         <div class="col s12">
             <div class="card horizontal">
                 <div class="card-image">
-                    <img src="{{ data_template.img_url }}">
+                    <img src="{{ data_template.img_url }}" alt="user profile picture">
                 </div>
                 <div class="card-stacked">
                   <div class="card-content">

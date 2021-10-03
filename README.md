@@ -332,7 +332,13 @@ Click on **Open app** in the right corner of your Heroku account. The app wil op
 - Text in Home page - [Bookpage](https://bookpage.com/)
 
 #### Media 
-- Books images and descriptions - [OpenLibrary](https://openlibrary.org).
+- Books images and descriptions
+    - [OpenLibrary](https://openlibrary.org).
+    - [Goodreads]https://www.goodreads.com
+- Default book cover
+    - https://twitter.com/openbookpublish
+
+
 
 #### Code
 - [Mini Project | Putting It All Together_Tim Nelson_CodeInstitute](https://github.com/Code-Institute-Solutions/TaskManagerAuth)

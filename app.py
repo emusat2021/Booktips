@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("SECRET_KEY")
-
+app.config["DEFAULT_BOOK_COVER_URL"] = "https://pbs.twimg.com/profile_images/1181583065811996673/ylZLdBGL_400x400.jpg"
 
 mongo = PyMongo(app)
 
@@ -32,6 +32,11 @@ def get_books():
 
 @app.route("/book/view/<book_id>")
 def book_view(book_id):
+    """
+    This route displays details about a book.
+    Arguments:
+    - book_id: the id of the book
+    """
     # check if the given book id is valid mongodb object id
     if ObjectId.is_valid(book_id):
         book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
@@ -88,9 +93,12 @@ def add_book():
                 "book_description": request.form.get("book_description"),
                 "user_id": user_id,
             }
-            # insert the document into the database
-            mongo.db.books.insert_one(book_data)
-            return redirect(url_for("get_books"))
+            if not book_data["book_cover_url"].startswith("http"):
+                book_data["book_cover_url"] = app.config["DEFAULT_BOOK_COVER_URL"]
+            # insert the document into the database and retrieve the inserted id
+            # idea from https://stackoverflow.com/questions/8783753/how-to-get-the-object-id-in-pymongo-after-an-insert
+            result = mongo.db.books.insert_one(book_data)
+            return redirect(url_for("book_view", book_id=result.inserted_id))
 
         if request.method == "GET":
             books_db = {
@@ -110,6 +118,11 @@ def add_book():
 
 @app.route("/edit_book/<book_id>", methods=["GET", "POST"])
 def edit_book(book_id):
+    """
+    This route edits details about a book.
+    Arguments:
+    - book_id: the id of the book
+    """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
@@ -134,7 +147,7 @@ def edit_book(book_id):
             # if not then redirect to profile view
             if not books_db:
                 flash("You are not allowed to edit this book!")
-                return redirect(url_for("profile_view", username=session["user"]))
+                return redirect(url_for("profile_view"))
             return render_template(
                 "action_book.html", books_j2=books_db, source_route="edit"
             )
@@ -159,7 +172,7 @@ def edit_book(book_id):
                 update_user_books,
             )
             print(result)
-            return redirect(url_for("profile", username=session["user"]))
+            return redirect(url_for("profile"))
 
     else:
         flash("You must be authenticated in order to edit books!")
@@ -172,6 +185,8 @@ def delete_book(book_id):
     Delete book.
     First we check user's authentication.
     Then delete.
+    Arguments:
+    - book_id: the id of the book
     """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -184,7 +199,7 @@ def delete_book(book_id):
         )
 
         flash("Book Successfully Deleted")
-        return redirect(url_for("profile", username=session["user"]))
+        return redirect(url_for("profile"))
     else:
         flash("You must be authenticated in order to delete books!")
         return redirect(url_for("get_books"))
@@ -192,6 +207,11 @@ def delete_book(book_id):
 
 @app.route("/add_review/<book_id>", methods=["GET", "POST"])
 def add_review(book_id):
+    """
+    This route adds a review to a specific book.
+    Arguments:
+    - book_id: the id of the book
+    """    
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
@@ -224,7 +244,7 @@ def add_review(book_id):
             }
             # insert the document into the database
             mongo.db.reviews.insert_one(user_review)
-            return redirect(url_for("get_books"))
+            return redirect(url_for("book_view", book_id=book_id))
 
     else:
         flash("You must be authenticated in order to add reviews!")
@@ -233,6 +253,11 @@ def add_review(book_id):
 
 @app.route("/edit_review/<book_id>", methods=["GET", "POST"])
 def edit_review(book_id):
+    """
+    This route edits a review about a specific book.
+    Arguments:
+    - book_id: the id of the book
+    """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
@@ -284,6 +309,8 @@ def delete_review(book_id):
     Delete review.
     First we check user's authentication.
     Then delete.
+    Arguments:
+    - book_id: the id of the book
     """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -296,7 +323,7 @@ def delete_review(book_id):
         )
 
         flash("Review Successfully Deleted")
-        return redirect(url_for("profile", username=session["user"]))
+        return redirect(url_for("book_view", book_id=book_id))
     else:
         flash("You must be authenticated in order to delete reviews!")
         return redirect(url_for("get_books"))
@@ -304,6 +331,9 @@ def delete_review(book_id):
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
+    """
+    This route searches for books in the database.
+    """
     if request.method == "POST":
         query = request.form.get("query")
         books = list(mongo.db.books.find({"$text": {"$search": query}}))
@@ -313,6 +343,9 @@ def search():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """
+    This route registers an account for an unregistered user.
+    """
     if request.method == "POST":
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()}
@@ -350,13 +383,16 @@ def register():
 
         session["user"] = request.form.get("username").lower()
         flash("Your account has been successfully created!")
-        return redirect(url_for("profile", username=session["user"]))
+        return redirect(url_for("profile"))
 
     return render_template("register.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    This routes authenticates an user.
+    """
     if request.method == "POST":
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()}
@@ -385,6 +421,9 @@ def login():
 
 @app.route("/profile/view", methods=["GET", "POST"])
 def profile():
+    """
+    This route displays the profile of the current logged in user.
+    """
     if session.get("user"):
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -437,6 +476,9 @@ def profile():
 
 @app.route("/profile/edit")
 def profile_edit():
+    """
+    This route edits the profile of the current logged in user.
+    """
     if session.get("user"):
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -457,6 +499,10 @@ def profile_edit():
 
 @app.route("/delete/profile", methods=["POST"])
 def delete_profile():
+    """
+    This route deletes the profile of the current logged in user.
+    It also deletes all the reviews, books belonging to the respective user.
+    """
     if session.get("user"):
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -495,6 +541,13 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("get_books"))
 
+@app.errorhandler(404)
+def page_not_found(e):
+    """
+    This route renders a custom error message.
+    """
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=True)

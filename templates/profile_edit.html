@@ -6,30 +6,28 @@
       <div class="card-panel">
         <div class="row valign-wrapper">
           <div class="col s12">
-            <img width="100" alt={{ data_template.username }} class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template.img_url }}"><br>
+            <img width="100" class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template.img_url }}" alt="user profile picture"><br>
           </div>
           <div class="col s10">
-            <span class="black-text">
               <h5 class="deep-purple-text text-darken-4">Full name: {{ data_template.user_firstname }} {{ data_template.user_lastname }}</h5>
               <h5 class="deep-purple-text text-darken-4">Email: {{ data_template.user_email }}</h5>
-              </span>
           </div>
         </div>
       </div>
   </div>
 </div>
     <div class="row">
-        <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('profile', username=data_template['username']) }}"> 
+        <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('profile') }}"> 
             <div class="card-panel">
                 <!-- user name -->
                 <div class="row">
                     <div class="input-field col s6">
                       <p class="deep-purple-text lighten-5">First Name</p>
-                      <input id="first_name" name="first_name" type="text" class="validate" value="{{ data_template["user_firstname"] }}" required>
+                      <input id="first_name" name="first_name" type="text" class="validate" value="{{ data_template["user_firstname"] }}" minlength="1" maxlength="30" pattern="^[a-zA-Z0-9]{1,30}$" required>
                     </div>
                     <div class="input-field col s6">
                       <p class="deep-purple-text lighten-5">Last Name</p>
-                      <input id="last_name" name="last_name" type="text" class="validate" value="{{ data_template["user_lastname"] }}" required>
+                      <input id="last_name" name="last_name" type="text" class="validate" value="{{ data_template["user_lastname"] }}" minlength="1" maxlength="30" pattern="^[a-zA-Z0-9]{1,30}$" required>
                     </div>
                 </div>
                 <!-- email -->
@@ -57,20 +55,17 @@
                         Save Profile <i class="fas fa-save"></i>
                     </button>
                   </div>
-                  
                 </div>
-              </form>
-                <div class="row">
-                  <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('delete_profile') }}">
-                  <div class="col s12 m6">
-                    <button type="submit" id="profile_delete" name="profile_delete" class="col s12 btn-small deep-purple darken-4 text-shadow">
-                        Delete Account <i class="material-icons">delete</i>
-                    </button>
-                </div>
-                </div>
-                </div>
-            
+            </div>
+        </form>
+    </div>
+    <div class="row">
+      <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('delete_profile') }}">
+      <div class="col s12 m6">
+        <button type="submit" id="profile_delete" name="profile_delete" class="col s12 btn-small deep-purple darken-4 text-shadow">
+            Delete Account <i class="material-icons">delete</i>
+        </button>
+      </div>
       </form>
-
     </div>
 {% endblock %}
