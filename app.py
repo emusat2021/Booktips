@@ -32,6 +32,11 @@ def get_books():
 
 @app.route("/book/view/<book_id>")
 def book_view(book_id):
+    """
+    This route displays details about a book.
+    Arguments:
+    - book_id: the id of the book
+    """
     # check if the given book id is valid mongodb object id
     if ObjectId.is_valid(book_id):
         book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
@@ -113,6 +118,11 @@ def add_book():
 
 @app.route("/edit_book/<book_id>", methods=["GET", "POST"])
 def edit_book(book_id):
+    """
+    This route edits details about a book.
+    Arguments:
+    - book_id: the id of the book
+    """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
@@ -175,6 +185,8 @@ def delete_book(book_id):
     Delete book.
     First we check user's authentication.
     Then delete.
+    Arguments:
+    - book_id: the id of the book
     """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -195,6 +207,11 @@ def delete_book(book_id):
 
 @app.route("/add_review/<book_id>", methods=["GET", "POST"])
 def add_review(book_id):
+    """
+    This route adds a review to a specific book.
+    Arguments:
+    - book_id: the id of the book
+    """    
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
@@ -236,6 +253,11 @@ def add_review(book_id):
 
 @app.route("/edit_review/<book_id>", methods=["GET", "POST"])
 def edit_review(book_id):
+    """
+    This route edits a review about a specific book.
+    Arguments:
+    - book_id: the id of the book
+    """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
@@ -287,6 +309,8 @@ def delete_review(book_id):
     Delete review.
     First we check user's authentication.
     Then delete.
+    Arguments:
+    - book_id: the id of the book
     """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -307,6 +331,9 @@ def delete_review(book_id):
 
 @app.route("/search", methods=["GET", "POST"])
 def search():
+    """
+    This route searches for books in the database.
+    """
     if request.method == "POST":
         query = request.form.get("query")
         books = list(mongo.db.books.find({"$text": {"$search": query}}))
@@ -316,6 +343,9 @@ def search():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """
+    This route registers an account for an unregistered user.
+    """
     if request.method == "POST":
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()}
@@ -360,6 +390,9 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    This routes authenticates an user.
+    """
     if request.method == "POST":
         existing_user = mongo.db.users.find_one(
             {"username": request.form.get("username").lower()}
@@ -388,6 +421,9 @@ def login():
 
 @app.route("/profile/view", methods=["GET", "POST"])
 def profile():
+    """
+    This route displays the profile of the current logged in user.
+    """
     if session.get("user"):
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -440,6 +476,9 @@ def profile():
 
 @app.route("/profile/edit")
 def profile_edit():
+    """
+    This route edits the profile of the current logged in user.
+    """
     if session.get("user"):
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -460,6 +499,10 @@ def profile_edit():
 
 @app.route("/delete/profile", methods=["POST"])
 def delete_profile():
+    """
+    This route deletes the profile of the current logged in user.
+    It also deletes all the reviews, books belonging to the respective user.
+    """
     if session.get("user"):
         # retrieve user id from the DB
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
@@ -500,6 +543,9 @@ def logout():
 
 @app.errorhandler(404)
 def page_not_found(e):
+    """
+    This route renders a custom error message.
+    """
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
