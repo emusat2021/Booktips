@@ -298,7 +298,7 @@ def delete_review(book_id):
         )
 
         flash("Review Successfully Deleted")
-        return redirect(url_for("profile"))
+        return redirect(url_for("book_view", book_id=book_id))
     else:
         flash("You must be authenticated in order to delete reviews!")
         return redirect(url_for("get_books"))
