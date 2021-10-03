@@ -6,7 +6,7 @@
             <div class="card-panel">
               <div class="row valign-wrapper">
                 <div class="col s12">
-                  <img width="100" alt={{ data_template.username }} class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template.img_url }}"><br>
+                  <img width="100" alt={{ data_template.username }} class="profilePictureIcon circularIcon circularIcon--huge circularIcon--border circle responsive-img" src="{{ data_template.img_url }}" alt="user profile picture"><br>
                   <!-- Edit profile -->         
                   <a href="{{ url_for('profile_edit') }}" class="col s12 m6 btn-small deep-purple darken-1 text-shadow">EDIT PROFILE</a>
                 </div>
@@ -29,7 +29,7 @@
           <div class="card large">
               <div class="card-image img-custom">
                   <a href="{{ url_for("book_view", book_id=book._id) }}">
-                      <img src="{{ book.book_cover_url }}" class="img-custom">
+                      <img src="{{ book.book_cover_url }}" class="img-custom" alt="book cover">
                   </a>
               </div>
               <div class="card-content">
@@ -61,7 +61,7 @@
         <div class="col s12">
             <div class="card horizontal">
                 <div class="card-image">
-                    <img src="{{ data_template.img_url }}">
+                    <img src="{{ data_template.img_url }}" alt="user profile picture">
                 </div>
                 <div class="card-stacked">
                   <div class="card-content">
