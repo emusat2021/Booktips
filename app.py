@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("SECRET_KEY")
-
+app.config["DEFAULT_BOOK_COVER_URL"] = "https://pbs.twimg.com/profile_images/1181583065811996673/ylZLdBGL_400x400.jpg"
 
 mongo = PyMongo(app)
 
@@ -88,6 +88,8 @@ def add_book():
                 "book_description": request.form.get("book_description"),
                 "user_id": user_id,
             }
+            if not book_data["book_cover_url"].startswith("http"):
+                book_data["book_cover_url"] = app.config["DEFAULT_BOOK_COVER_URL"]
             # insert the document into the database
             mongo.db.books.insert_one(book_data)
             return redirect(url_for("get_books"))
@@ -499,6 +501,6 @@ def logout():
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
-    
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=True)
