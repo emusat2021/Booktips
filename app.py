@@ -161,7 +161,7 @@ def edit_book(book_id):
                 update_user_books,
             )
             print(result)
-            return redirect(url_for("profile", username=session["user"]))
+            return redirect(url_for("profile"))
 
     else:
         flash("You must be authenticated in order to edit books!")
@@ -186,7 +186,7 @@ def delete_book(book_id):
         )
 
         flash("Book Successfully Deleted")
-        return redirect(url_for("profile", username=session["user"]))
+        return redirect(url_for("profile"))
     else:
         flash("You must be authenticated in order to delete books!")
         return redirect(url_for("get_books"))
@@ -298,7 +298,7 @@ def delete_review(book_id):
         )
 
         flash("Review Successfully Deleted")
-        return redirect(url_for("profile", username=session["user"]))
+        return redirect(url_for("profile"))
     else:
         flash("You must be authenticated in order to delete reviews!")
         return redirect(url_for("get_books"))
@@ -352,7 +352,7 @@ def register():
 
         session["user"] = request.form.get("username").lower()
         flash("Your account has been successfully created!")
-        return redirect(url_for("profile", username=session["user"]))
+        return redirect(url_for("profile"))
 
     return render_template("register.html")
 
