@@ -90,9 +90,10 @@ def add_book():
             }
             if not book_data["book_cover_url"].startswith("http"):
                 book_data["book_cover_url"] = app.config["DEFAULT_BOOK_COVER_URL"]
-            # insert the document into the database
-            mongo.db.books.insert_one(book_data)
-            return redirect(url_for("get_books"))
+            # insert the document into the database and retrieve the inserted id
+            # idea from https://stackoverflow.com/questions/8783753/how-to-get-the-object-id-in-pymongo-after-an-insert
+            result = mongo.db.books.insert_one(book_data)
+            return redirect(url_for("book_view", book_id=result.inserted_id))
 
         if request.method == "GET":
             books_db = {
