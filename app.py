@@ -226,7 +226,7 @@ def add_review(book_id):
             }
             # insert the document into the database
             mongo.db.reviews.insert_one(user_review)
-            return redirect(url_for("get_books"))
+            return redirect(url_for("book_view", book_id=book_id))
 
     else:
         flash("You must be authenticated in order to add reviews!")
