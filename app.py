@@ -603,5 +603,14 @@ def page_not_found(e):
     return render_template("404.html"), 404
 
 
+@app.errorhandler(500)
+def internal_error(e):
+    """
+    This route renders a custom internal error message.
+    """
+    # note that we set the 500 status explicitly
+    return render_template("500.html"), 500
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=False)
