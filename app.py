@@ -487,7 +487,8 @@ def profile_edit():
     This route edits the profile of the current logged in user.
     """
     if session.get("user"):
-        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
+        current_user = mongo.db.users.find_one({"username": session["user"]})
+        user_id = current_user["_id"]
         if request.method == "GET":
             # retrieve user id from the DB
             user_profile = mongo.db.profiles.find_one({"user_id": user_id})
@@ -501,6 +502,31 @@ def profile_edit():
             }
 
             return render_template("profile_edit.html", data_template=data_template)
+        if request.method == "POST":
+            # verify that the old password is the same as the current user's password
+            # ensure hashed password matches user input
+            if check_password_hash(
+                current_user["password"], request.form.get("old_password")
+            ):
+                # verify that the password is equal to confirm password
+                if request.form.get("new_password") != request.form.get("confirm_new_password"):
+                    flash("New passwords do not match!")
+                    return redirect(url_for("profile_edit"))
+                else:
+                    document = {
+                        "username": session["user"],
+                        "password": generate_password_hash(request.form.get("new_password")),
+                    }
+                    mongo.db.users.update({"_id": user_id}, document)
+
+                flash("Password successfully updated!")
+                return redirect(url_for("profile_edit"))
+
+            else:
+                # invalid password match
+                flash("Incorrect Password, cannot update your password!")
+                return redirect(url_for("profile_edit"))
+
     flash("You must be authenticated in order to edit your profile!")
     return redirect(url_for("login"))
 
