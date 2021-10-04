@@ -284,7 +284,7 @@ After I correctly fill in all the fields and submit the form, the profile was up
 
 ![test01](test-images/registered_user_view_profile_page_after_save.jpg)
 ##### 4.1.1.6 Delete Account
-I deleted some testing accounts to test the functionality. When clicking the "Delete account" button on the /profile/edit page, my account was deleted. I checked the database and all the reviews and books created by the repsective user were removed as well.
+I deleted some testing accounts to test the functionality. When clicking the "Delete account" button on the /profile/edit page, a modal appears. Clicking again on Delete account deletes my account. I checked the database and all the reviews and books created by the repsective user were removed as well.
 
 ##### 4.1.1.7 Add New Book
 I added a few test books to check the functionality throughout the development.  If I leave some of the required fields empty, I will not be able to submit the form. I also tried to add a book without the URL image provided, to check if the placeholder is in place and it works well.
@@ -365,8 +365,8 @@ Plenty of changes were made and necessary media queries added to make the websit
 #### Clone the project 
 To make a local clone, follow the following steps. 
 1. Log in to GitHub and go to the repository. 
-2. Click on the green button with the text **“Code”.**
-3. Click on **“Open with GitHub Desktop”** and follow the prompts in the GitHub Desktop Application or follow the instructions from **[this link](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop)** to see how to clone the repository in other ways. 
+2. Click on the green button with the text **"Code".**
+3. Click on **"Open with GitHub Desktop"** and follow the prompts in the GitHub Desktop Application or follow the instructions from **[this link](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/cloning-a-repository#cloning-a-repository-to-github-desktop)** to see how to clone the repository in other ways. 
 
 #### Working with the local copy
 1. Install all the requirements: Go to the workspace of your local copy. In the terminal window of your IDE type: **pip3 install -r requirements.txt**.
