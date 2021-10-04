@@ -169,21 +169,21 @@ Initial wireframes with some comments for both desktop and mobile devices can be
 
 ### 2.1 Existing features 
 
-#### 1. Design 
+#### 2.1.1 Design 
 - An attractive and simple layout with consistency.
 - Simple navigation throughout the website by using the navigation bar. 
 - Showing added books simple and clearly
 
-#### 2. General 
+#### 2.1.2 General 
 - The home page shows an introductory text followed by a search box. Underneath there is a list of all books.
 - Unregistered users are able to register on the "Register" page
 
-#### 3. Books and Reviews
+#### 2.1.3 Books and Reviews
 - Books and reviews can be created, read, updated and deleted (CRUD) by the users. 
 - Users can search for Books using the search bar. 
 - Users have access to their profile, with an overview of all their added books and reviews. 
 
-#### 4. Register, login and logout 
+#### 2.1.4 Register, login and logout 
 - An unregistered user can create a new account on the web application.
 - Registered users can login with their existing accounts. 
 - Registered users can easily log out.
