@@ -148,7 +148,7 @@ def edit_book(book_id):
             # if not then redirect to profile view
             if not books_db:
                 flash("You are not allowed to edit this book!")
-                return redirect(url_for("profile_view"))
+                return redirect(url_for("profile"))
             return render_template(
                 "action_book.html", books_j2=books_db, source_route="edit"
             )
