@@ -184,13 +184,19 @@ def delete_book(book_id):
     """
     Delete book.
     First we check user's authentication.
-    Then delete.
+    Then delete all the associated reviews and then the book.
     Arguments:
     - book_id: the id of the book
     """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
         # filter on book id and specific user id
+        mongo.db.reviews.remove(
+            {
+                "book_id": ObjectId(book_id),
+                "user_id": user_id,
+            }
+        )
         mongo.db.books.remove(
             {
                 "_id": ObjectId(book_id),
