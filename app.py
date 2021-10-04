@@ -17,7 +17,7 @@ app.secret_key = os.environ.get("SECRET_KEY")
 app.config[
     "DEFAULT_BOOK_COVER_URL"
 ] = "https://pbs.twimg.com/profile_images/1181583065811996673/ylZLdBGL_400x400.jpg"
-
+app.config["DEFAULT_PROFILE_PICTURE"] = "https://s.gr-assets.com/assets/nophoto/user/u_111x148-9394ebedbb3c6c218f64be9549657029.png"
 mongo = PyMongo(app)
 
 
@@ -396,7 +396,7 @@ def register():
             "user_email": "",
             "user_firstname": "",
             "user_lastname": "",
-            "img_url": "https://s.gr-assets.com/assets/nophoto/user/u_111x148-9394ebedbb3c6c218f64be9549657029.png",
+            "img_url": app.config["DEFAULT_PROFILE_PICTURE"],
             "user_id": user_id,
         }
         # insert the document into the database
