@@ -235,7 +235,7 @@ def add_review(book_id):
                 "user_id": user_id,
             }
         )
-        # if user has already review on the respective book then rediret to edit
+        # if user has already review on the respective book then redirect to edit
         if review_db:
             return redirect(url_for("edit_review", book_id=book_id))
 
