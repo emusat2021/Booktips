@@ -109,8 +109,49 @@ The images I used for this project came from [OpenLibrary](https://openlibrary.o
 ### 1.4 Database architecture
 The project has four collections in the database. The database structure in MongoDB is as follows: 
 - there are 4 collections: books, profiles, reviews, users;
-- there are 2 indexes on book_title and book_author_name
-More details about the database structure is in the [Deployment section](#deployment)
+- there are 2 indexes on book_title and book_author_name;
+- there are relationships between collections as described below;
+
+I used [DBDiagram](https://dbdiagram.io/d) to create a diagram of the database.
+The code to produce the diagram is here:
+```
+Table users {
+  _id ObjectId [pk]
+  username string
+  password string
+}
+
+Table profiles {
+  _id ObjectId [pk]
+  user_email string
+  user_firstname string
+  user_lastname string
+  img_url string
+  user_id ObjectId [ref: > users._id]
+}
+
+Table books {
+  _id ObjectId [pk]
+  book_title string
+  book_author_name string
+  book_cover_url string
+  book_isbn string
+  book_description string
+  user_id ObjectId [ref: > users._id]
+}
+
+Table reviews {
+  _id ObjectId [pk]
+  review_text string
+  user_id ObjectId [ref: > users._id]
+  book_id ObjectId [ref: > books._id]
+}
+```
+This is the diagram:
+
+![Database diagram](db/booktips-database-diagram.jpg)
+
+Other details about the database structure are in the [Deployment section](#deployment)
 
 
 <span id="ux-mockup"></span>
