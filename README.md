@@ -1,5 +1,7 @@
 # Booktips
 
+![test01](site_am_i_responsive.jpg)
+
 This project is the third Milestone Project in the "Python and Data Centric Development" course at <a href="https://codeinstitute.net/" target="_blank">Code Institute</a>.
 
 **Book Tips** compiles the best and most popular books and creative reviews.
