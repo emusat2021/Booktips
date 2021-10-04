@@ -1,5 +1,7 @@
 # Booktips
 
+![test01](site_am_i_responsive.jpg)
+
 This project is the third Milestone Project in the "Python and Data Centric Development" course at <a href="https://codeinstitute.net/" target="_blank">Code Institute</a>.
 
 **Book Tips** compiles the best and most popular books and creative reviews.
@@ -475,7 +477,8 @@ Click on **Open app** in the right corner of your Heroku account. The app wil op
     - [Goodreads]https://www.goodreads.com
 - Default book cover
     - https://twitter.com/openbookpublish
-
+- Home page image
+    - https://foodtank.com/news/2021/07/books-on-food-tanks-summer-reading-list/
 
 
 #### Code

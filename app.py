@@ -14,8 +14,10 @@ app = Flask(__name__)
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.secret_key = os.environ.get("SECRET_KEY")
-app.config["DEFAULT_BOOK_COVER_URL"] = "https://pbs.twimg.com/profile_images/1181583065811996673/ylZLdBGL_400x400.jpg"
-
+app.config[
+    "DEFAULT_BOOK_COVER_URL"
+] = "https://pbs.twimg.com/profile_images/1181583065811996673/ylZLdBGL_400x400.jpg"
+app.config["DEFAULT_PROFILE_PICTURE"] = "https://s.gr-assets.com/assets/nophoto/user/u_111x148-9394ebedbb3c6c218f64be9549657029.png"
 mongo = PyMongo(app)
 
 
@@ -224,7 +226,7 @@ def add_review(book_id):
     This route adds a review to a specific book.
     Arguments:
     - book_id: the id of the book
-    """    
+    """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
 
@@ -394,7 +396,7 @@ def register():
             "user_email": "",
             "user_firstname": "",
             "user_lastname": "",
-            "img_url": "https://s.gr-assets.com/assets/nophoto/user/u_111x148-9394ebedbb3c6c218f64be9549657029.png",
+            "img_url": app.config["DEFAULT_PROFILE_PICTURE"],
             "user_id": user_id,
         }
         # insert the document into the database
@@ -521,13 +523,17 @@ def profile_edit():
                 current_user["password"], request.form.get("old_password")
             ):
                 # verify that the password is equal to confirm password
-                if request.form.get("new_password") != request.form.get("confirm_new_password"):
+                if request.form.get("new_password") != request.form.get(
+                    "confirm_new_password"
+                ):
                     flash("New passwords do not match!")
                     return redirect(url_for("profile_edit"))
                 else:
                     document = {
                         "username": session["user"],
-                        "password": generate_password_hash(request.form.get("new_password")),
+                        "password": generate_password_hash(
+                            request.form.get("new_password")
+                        ),
                     }
                     mongo.db.users.update({"_id": user_id}, document)
 
@@ -587,13 +593,15 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("home_page"))
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     """
     This route renders a custom error message.
     """
     # note that we set the 404 status explicitly
-    return render_template('404.html'), 404
+    return render_template("404.html"), 404
+
 
 if __name__ == "__main__":
-    app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=True)
+    app.run(host=os.environ.get("IP"), port=int(os.environ.get("PORT")), debug=False)
