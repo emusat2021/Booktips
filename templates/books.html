@@ -1,11 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<h3 class="deep-purple-text text-darken-4 center-align "><i>Discover your next great book!</i></h3>
-<p class="deep-purple-text text-darken-4 center-align">
-    <strong>Book Tips</strong> compiles the best and most popular books and creative reviews.
-    It’s a fun and interactive way to geek out over your favorite reads and discover all the coolest new titles you won’t find anywhere else. 
-</p>
-
 <!-- search -->
 <div class="row card-panel grey lighten-5">
     <form action="{{ url_for('search') }}" method="POST" class="col s12">
@@ -15,12 +9,12 @@
                 <input type="text" name="query" id="query" minlength="3" class="validate" required>
                 <label for="query">Search Books</label>
             </div>
-            <div class="col s12 m4">
-                <button type="reset" class="s3 light-blue darken-4 btn text-shadow">
+            <div class="col s4 m4">
+                <button type="reset" class="btn-small light-blue darken-4 btn text-shadow">
                     Reset
                 </button>
-                <button type="submit" class="s3 deep-purple darken-1 btn text-shadow">
-                    <i class="fas fa-search left"></i> Search
+                <button type="submit" class="btn-small deep-purple darken-1 btn text-shadow">Search
+                    <i class="small fas fa-search left"></i>
                 </button>
             </div>
         </div>

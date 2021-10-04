@@ -20,11 +20,17 @@ mongo = PyMongo(app)
 
 
 @app.route("/")
+def home_page():
+    """
+    This route displays the home webpage.
+    """
+    return render_template("home_page.html")
+
+
 @app.route("/get_books")
 def get_books():
     """
-    This route displays a list of all books
-    from database in home webpage.
+    This route displays a list of all books from database.
     """
     books = list(mongo.db.books.find().sort("book_title", 1))
     return render_template("books.html", books=books)
@@ -98,6 +104,7 @@ def add_book():
             # insert the document into the database and retrieve the inserted id
             # idea from https://stackoverflow.com/questions/8783753/how-to-get-the-object-id-in-pymongo-after-an-insert
             result = mongo.db.books.insert_one(book_data)
+            flash("The book was successfully added.")
             return redirect(url_for("book_view", book_id=result.inserted_id))
 
         if request.method == "GET":
@@ -147,7 +154,7 @@ def edit_book(book_id):
             # if not then redirect to profile view
             if not books_db:
                 flash("You are not allowed to edit this book!")
-                return redirect(url_for("profile_view"))
+                return redirect(url_for("profile"))
             return render_template(
                 "action_book.html", books_j2=books_db, source_route="edit"
             )
@@ -184,13 +191,19 @@ def delete_book(book_id):
     """
     Delete book.
     First we check user's authentication.
-    Then delete.
+    Then delete all the associated reviews and then the book.
     Arguments:
     - book_id: the id of the book
     """
     if session.get("user"):
         user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
         # filter on book id and specific user id
+        mongo.db.reviews.remove(
+            {
+                "book_id": ObjectId(book_id),
+                "user_id": user_id,
+            }
+        )
         mongo.db.books.remove(
             {
                 "_id": ObjectId(book_id),
@@ -222,14 +235,16 @@ def add_review(book_id):
                 "user_id": user_id,
             }
         )
-        # if user has already review on the respective book then rediret to edit
+        # if user has already review on the respective book then redirect to edit
         if review_db:
             return redirect(url_for("edit_review", book_id=book_id))
 
         if request.method == "GET":
             # read book details from DB
             book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
-
+            if not book:
+                flash("Cannot write a review for a non existing book!")
+                return redirect(url_for("get_books"))
             return render_template(
                 "action_review.html", book=book, review_j2=review_db, source_route="add"
             )
@@ -272,6 +287,9 @@ def edit_review(book_id):
                     "user_id": user_id,
                 }
             )
+            if not book:
+                flash("Cannot edit a review for a non existing book!")
+                return redirect(url_for("get_books"))
 
             return render_template(
                 "action_review.html",
@@ -354,6 +372,7 @@ def register():
             flash("Username already exists")
             return redirect(url_for("register"))
 
+        # verify that the password is equal to confirm password
         if request.form.get("password") != request.form.get("confirm_password"):
             flash("Passwords do not match")
             return redirect(url_for("register"))
@@ -474,25 +493,52 @@ def profile():
     return redirect(url_for("login"))
 
 
-@app.route("/profile/edit")
+@app.route("/profile/edit", methods=["GET", "POST"])
 def profile_edit():
     """
     This route edits the profile of the current logged in user.
     """
     if session.get("user"):
-        # retrieve user id from the DB
-        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
-        user_profile = mongo.db.profiles.find_one({"user_id": user_id})
+        current_user = mongo.db.users.find_one({"username": session["user"]})
+        user_id = current_user["_id"]
+        if request.method == "GET":
+            # retrieve user id from the DB
+            user_profile = mongo.db.profiles.find_one({"user_id": user_id})
 
-        data_template = {
-            "user_email": user_profile["user_email"],
-            "user_firstname": user_profile["user_firstname"],
-            "user_lastname": user_profile["user_lastname"],
-            "img_url": user_profile["img_url"],
-            "username": session["user"],
-        }
+            data_template = {
+                "user_email": user_profile["user_email"],
+                "user_firstname": user_profile["user_firstname"],
+                "user_lastname": user_profile["user_lastname"],
+                "img_url": user_profile["img_url"],
+                "username": session["user"],
+            }
 
-        return render_template("profile_edit.html", data_template=data_template)
+            return render_template("profile_edit.html", data_template=data_template)
+        if request.method == "POST":
+            # verify that the old password is the same as the current user's password
+            # ensure hashed password matches user input
+            if check_password_hash(
+                current_user["password"], request.form.get("old_password")
+            ):
+                # verify that the password is equal to confirm password
+                if request.form.get("new_password") != request.form.get("confirm_new_password"):
+                    flash("New passwords do not match!")
+                    return redirect(url_for("profile_edit"))
+                else:
+                    document = {
+                        "username": session["user"],
+                        "password": generate_password_hash(request.form.get("new_password")),
+                    }
+                    mongo.db.users.update({"_id": user_id}, document)
+
+                flash("Password successfully updated!")
+                return redirect(url_for("profile_edit"))
+
+            else:
+                # invalid password match
+                flash("Incorrect Password, cannot update your password!")
+                return redirect(url_for("profile_edit"))
+
     flash("You must be authenticated in order to edit your profile!")
     return redirect(url_for("login"))
 
@@ -529,17 +575,17 @@ def delete_profile():
 
         flash("Your account has been deleted!")
         session.pop("user", None)
-        return redirect(url_for("get_books"))
+        return redirect(url_for("home_page"))
     else:
         flash("You must be authenticated in order to delete your account!")
-        return redirect(url_for("get_books"))
+        return redirect(url_for("home_page"))
 
 
 @app.route("/logout")
 def logout():
     flash("You have been logged out")
     session.pop("user", None)
-    return redirect(url_for("get_books"))
+    return redirect(url_for("home_page"))
 
 @app.errorhandler(404)
 def page_not_found(e):

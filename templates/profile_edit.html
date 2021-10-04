@@ -16,6 +16,31 @@
       </div>
   </div>
 </div>
+<!-- card with change password -->
+<div class="row">
+    <div class="col s12 m8 offset-m2">
+        <div class="card-panel">
+
+          <h5 class="center-align deep-purple-text text-darken-4">Change password</h5>
+          <div class="row">
+            <form class="col s12 m6 offset-m2" method="POST" action="{{ url_for('profile_edit') }}">
+              <div class="row">
+                  <p class="deep-purple-text lighten-5">Old Password</p>
+                  <input id="old_password" name="old_password" type="password" class="validate" value="" required>
+                  <p class="deep-purple-text lighten-5">New password (min 5 max 15 chars)</p>
+                  <input id="new_password" name="new_password" type="password" class="validate" value="" minlength="5" maxlength="15" pattern="^.*{5,15}$" required>
+                  <p class="deep-purple-text lighten-5">Confirm new password (min 5 max 15 chars)</p>
+                  <input id="confirm_new_password" name="confirm_new_password" type="password" class="validate" value="" minlength="5" maxlength="15" pattern="^.*{5,15}$" required>
+                  <button type="submit" id="save_password" name="save_password" class="col s12 btn-small deep-purple darken-4 text-shadow">
+                    Save Password
+                </button>
+            </div>
+          </form>
+          </div>
+        </div>
+   </div>
+</div>
+<!-- card with profile details -->
     <div class="row">
         <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('profile') }}"> 
             <div class="card-panel">
@@ -55,17 +80,32 @@
                         Save Profile <i class="fas fa-save"></i>
                     </button>
                   </div>
+                <div class="col s12 m3">
+                  <!-- Modal Trigger -->
+                  <a class="waves-effect waves-light btn-small modal-trigger red text-shadow" href="#modal1">DELETE ACCOUNT<i class="material-icons">delete</i></a>
                 </div>
+              </div>
             </div>
         </form>
-    </div>
-    <div class="row">
-      <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('delete_profile') }}">
-      <div class="col s12 m6">
-        <button type="submit" id="profile_delete" name="profile_delete" class="col s12 btn-small deep-purple darken-4 text-shadow">
-            Delete Account <i class="material-icons">delete</i>
-        </button>
+        </div>
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4 class="red-text">Delete account</h4>
+        <p>Are you sure you want to delete your account?</p>
       </div>
-      </form>
+      <div class="modal-footer">
+        <form class="col s12 m8 offset-m2" method="POST" action="{{ url_for('delete_profile') }}">
+          <div class="col s12 m6">
+            <button type="submit" id="profile_delete" name="profile_delete" class="col s12 btn-small red text-shadow">
+                Delete Account <i class="material-icons">delete</i>
+            </button>
+            <a href="#!" class="modal-close waves-effect waves-green btn-small deep-purple darken-4 text-shadow">No</a>
+          </div>
+          </form>
+        </div>
     </div>
+
+
+
 {% endblock %}

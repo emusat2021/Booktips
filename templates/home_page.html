@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="deep-purple-text text-darken-4 center-align"><i>Discover your next great book!</i></h2>
+<p class="deep-purple-text text-darken-4 center-align">
+    <strong>Book Tips</strong> compiles the best and most popular books and creative reviews.
+    It’s a fun and interactive way to geek out over your favorite reads and discover all the coolest new titles you won’t find anywhere else. 
+</p>
+<p class="deep-purple-text text-darken-4 center-align" style="font-size: 2em;">
+    <a href="{{ url_for("get_books") }}" class="deep-purple-text text-darken-4 center-align"><strong>Click here for all books!</strong></a>
+</p>
+<div class="row center-align">
+  <img class="center-align img-home" src="https://k48b9e9840-flywheel.netdna-ssl.com/wp-content/uploads/2021/07/alfons-morales-YLSwjSy7stw-unsplash.jpg" alt="books">
+</div>
+{% endblock %}
