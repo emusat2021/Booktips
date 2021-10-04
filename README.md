@@ -255,6 +255,103 @@ Initial wireframes with some comments for both desktop and mobile devices can be
 
 <h1>4. Testing</h1>
 
+### 4.1 Manual Testing 
+
+#### 4.1.1 User stories testing
+All the following manual testing was implemented on both desktop and mobile devices.
+
+##### 4.1.1.1 All books and single book display
+When I click on "All Books", I can see book cards displayed in rows, 3 books per row. In that page, I can see the book cover, book title and author name.
+Clicking on the book card redirects me to the /book/view page, where I can see all the detailed information about the book, including the reviews. I tested this functionality as an unregistered user and as a logged in user and it worked in both cases.
+
+##### 4.1.1.2 Create a new user account
+I created my own account, as well as a few test accounts to test this functionality. Clicking on the "Register" button in the navbar opens the form, where I can put the desired username and password to create a new account. I tried to input an existing username, not matching passwords in "password" and "confirm password" fields, and input less than 5 or more than 15 charachters.
+In all cases I got a corresponding feedback message. As well as that, I tried to leave an empty field and submit the form, but got an error message again asking to fill the field. When the form was successfully submitted, I was redirected to the home page, seeing a message that my new account was created.
+I also checked the link to the Login page at the bottom of the form, which worked well. 
+![test01](test-images/unregistered_user_register_page.jpg)
+##### 4.1.1.3 Login
+Clicking on the "Login" button in the navbar opens the form, allowing me to login to my account. I tried to leave empty fields or input incorrect details, but I was not able to submit the form if something was entered incorrectly. After a successful login I was redirected to the home page, seeing the message that I was logged in. 
+##### 4.1.1.4 Change password
+This functionality is located in the /profile/edit page.
+I tried to write a different password than my own password and I received feedback that my current password was incorrect, thus I couldn't update my password.
+I tried to put less than 5 characters and more than 15 characters on my new password and I got a feedback message, thus I couldn't update my password.
+After I correctly put my current password and the new password, the password was updated successfuly and I was redirected to the /profile/edit page, as intended.
+##### 4.1.1.5 Edit profile
+This functionality is located in the /profile/edit page as a separate form.
+I tried to put spaces in the First Name and Last Name fields and submit the from. I received a feddback message saying that I didn't have the proper format. 
+I tried to write an invalid format for the email address and submit the form. I received feedback that the email address had incorrect format.
+After I correctly fill in all the fields and submit the form, the profile was updated successfuly.
+
+![test01](test-images/registered_user_view_profile_page_after_save.jpg)
+##### 4.1.1.6 Delete Account
+I deleted some testing accounts to test the functionality. When clicking the "Delete account" button on the /profile/edit page, my account was deleted. I checked the database and all the reviews and books created by the repsective user were removed as well.
+
+##### 4.1.1.7 Add New Book
+I added a few test books to check the functionality throughout the development.  If I leave some of the required fields empty, I will not be able to submit the form. I also tried to add a book without the URL image provided, to check if the placeholder is in place and it works well.
+After I added a book, I got a feedback message saying that the book was added. 
+
+##### 4.1.1.8 Edit Book
+If I am the user who added the book in the first place, I can see the book in the /profile/view page, together with the buttons "Edit" and "Delete". I also tried to change the link manually in the browser to edit other's book. I received a feedback message stating that I am not allowed to edit the respective book.
+Being the author of the book, I can view the form with pre-populated fields and can change anything that I want. I tried to edit a number of books and edit different fields, everything worked correctly.
+![test01](test-images/registered_user_delete_book_not_allowed.jpg)
+
+##### 4.1.1.9 Delete Book
+As an unauthenticated user I tried to delete a book by using the /delete_book/<book_id> page but I received a feedback message stating that I could not delete the book because I was not authenticated.
+As an authenticated user I went to /profile/view where I have listed all my added books. I chose a book and clicked on the Delete button underneath. The book was successfully deleted. Also, all the reviews pertaining to that book were also deleted.
+
+##### 4.1.1.10 View all Books
+The link in the navbar leads to the home page, where I can see all the books and the search bar. All functionality works well.
+
+##### 4.1.1.11 Add New Review
+This functionality is implemented in the /book/view page. As an authenticated user, when clicking on the Add review button, I am redirected to //add_review/<book_id>page where I am presented with a form to add the review. After I write the review and submit the form, the review successfully apear in the database.
+I verified that an unauthenticated user cannot add a review.
+
+##### 4.1.1.12 Edit Review
+This functionality is implemented in the /profile/view page, under the Reviews section. When clicking on the Edit button for a specific review, I am redirected to the /edit_review/<book_id> page. The form is pre-populated with the existing review. After making changes to the review text and submitting the form, the review is correctly updated in the database.
+
+##### 4.1.1.13 Delete Review
+This functionality is implemented in the /profile/view page, under the Reviews section. When clicking on the Delete button for a specific review, the review is deleted.
+
+##### 4.1.1.14 View Reviews
+An unauthenticated user can see all the reviews for a book on the /book/view page.
+I tested this functionality by adding a few reviews to a book from different accounts and then checking that all the added reviews are displayed under the respective book.
+An authenticated user can see all the reviews for a book on the /book/view page. Besides that, the user can see it's own reviews in the /profile/view page.
+I tested the functionality on the /profile/view page by adding one review per book to multiple books and then checking that all the previously added reviews are shown on the /profile/view page.
+
+##### 4.1.1.15 404 error
+I manually changed the URL in the browser to get a non-existing page to test errors-handler function. Custom page loads and the link to the home page works well.
+
+##### 4.1.1.16 Navbar
+All links in the navbar were manually tested to ensure that they are pointing to the correct destination.   
+
+
+Apart from that, I was manually testing the app with **debugger**: `debug=True` throughout all the development process. 
+Every time when there was an error (when app crashed), the debugger displayed an error message to the view, that allowed me to find the location of the error and fix it.
+
+#### 4.1.2 Further testing
+I also asked my friends and family members to thoroughly test my website in different devices. So, a number of new accounts were created and new books/reviews were added/edited and some of them were deleted. 
+
+
+### 4.2 Validators
+
+#### 4.2.1 Html
+All the HTML content of all the pages was tested through [W3C Markup Validation Service](https://validator.w3.org/#validate_by_input). No errors were found.
+
+#### 4.2.2 CSS
+CSS file was tested through [W3C CSS Validation Service](https://jigsaw.w3.org/css-validator/). No errors were found.
+
+#### 4.2.3 JavaScript
+JS file was tested through [Esprima](https://esprima.org/demo/validate.html) and [JSHint](https://jshint.com/) validators, code was syntactically valid.
+
+#### 4.2.4 Python
+All python files were tested through [PEP8 Online](http://pep8online.com/) validator and were completely PEP8 compliant.
+
+### 4.3 Compatibility and Responsiveness
+This website had been being tested during the development across **multiple browsers** (Chrome, Safary, Opera, FireFox) and on **multiple devices**: mobile (iPhone 5, 6, 8, Samsung Galaxy, Sony Xperia), tablets(iPad, iPadPro) and laptops (with HiDPI and MDPI and touch screens).     
+As well as on **Google Chrome's developer tools** to see how it looks across all the different device screen sizes to ensure compatibility and responsiveness.   
+I also used [Am I Responsive](http://ami.responsivedesign.is/) online tool for checking responsiveness on different devices.   
+Plenty of changes were made and necessary media queries added to make the website fully responsive.   
+
 <span id="deployment"></span>
 
 <h1>5. Deployment</h1>
