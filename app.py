@@ -481,7 +481,7 @@ def profile():
     return redirect(url_for("login"))
 
 
-@app.route("/profile/edit", method=["GET", "POST"])
+@app.route("/profile/edit", methods=["GET", "POST"])
 def profile_edit():
     """
     This route edits the profile of the current logged in user.
