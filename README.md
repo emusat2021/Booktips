@@ -477,7 +477,8 @@ Click on **Open app** in the right corner of your Heroku account. The app wil op
     - [Goodreads]https://www.goodreads.com
 - Default book cover
     - https://twitter.com/openbookpublish
-
+- Home page image
+    - https://foodtank.com/news/2021/07/books-on-food-tanks-summer-reading-list/
 
 
 #### Code
