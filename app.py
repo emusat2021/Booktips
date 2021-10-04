@@ -480,25 +480,26 @@ def profile():
     return redirect(url_for("login"))
 
 
-@app.route("/profile/edit")
+@app.route("/profile/edit", method=["GET", "POST"])
 def profile_edit():
     """
     This route edits the profile of the current logged in user.
     """
     if session.get("user"):
-        # retrieve user id from the DB
-        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
-        user_profile = mongo.db.profiles.find_one({"user_id": user_id})
+        if request.method == "GET":
+            # retrieve user id from the DB
+            user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
+            user_profile = mongo.db.profiles.find_one({"user_id": user_id})
 
-        data_template = {
-            "user_email": user_profile["user_email"],
-            "user_firstname": user_profile["user_firstname"],
-            "user_lastname": user_profile["user_lastname"],
-            "img_url": user_profile["img_url"],
-            "username": session["user"],
-        }
+            data_template = {
+                "user_email": user_profile["user_email"],
+                "user_firstname": user_profile["user_firstname"],
+                "user_lastname": user_profile["user_lastname"],
+                "img_url": user_profile["img_url"],
+                "username": session["user"],
+            }
 
-        return render_template("profile_edit.html", data_template=data_template)
+            return render_template("profile_edit.html", data_template=data_template)
     flash("You must be authenticated in order to edit your profile!")
     return redirect(url_for("login"))
 
