@@ -320,8 +320,8 @@ I tested this functionality by adding a few reviews to a book from different acc
 An authenticated user can see all the reviews for a book on the /book/view page. Besides that, the user can see it's own reviews in the /profile/view page.
 I tested the functionality on the /profile/view page by adding one review per book to multiple books and then checking that all the previously added reviews are shown on the /profile/view page.
 
-##### 4.1.1.15 404 error
-I manually changed the URL in the browser to get a non-existing page to test errors-handler function. Custom page loads and the link to the home page works well.
+##### 4.1.1.15 404/500 errors
+I manually changed the URL in the browser to get a non-existing page to test errors-handler function. Custom pages load and the link to the home page works well.
 
 ##### 4.1.1.16 Navbar
 All links in the navbar were manually tested to ensure that they are pointing to the correct destination.   
