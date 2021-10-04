@@ -486,9 +486,9 @@ def profile_edit():
     This route edits the profile of the current logged in user.
     """
     if session.get("user"):
+        user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
         if request.method == "GET":
             # retrieve user id from the DB
-            user_id = mongo.db.users.find_one({"username": session["user"]})["_id"]
             user_profile = mongo.db.profiles.find_one({"user_id": user_id})
 
             data_template = {
