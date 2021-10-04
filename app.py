@@ -20,11 +20,17 @@ mongo = PyMongo(app)
 
 
 @app.route("/")
+def home_page():
+    """
+    This route displays the home webpage.
+    """
+    return render_template("home_page.html")
+
+
 @app.route("/get_books")
 def get_books():
     """
-    This route displays a list of all books
-    from database in home webpage.
+    This route displays a list of all books from database.
     """
     books = list(mongo.db.books.find().sort("book_title", 1))
     return render_template("books.html", books=books)
@@ -564,17 +570,17 @@ def delete_profile():
 
         flash("Your account has been deleted!")
         session.pop("user", None)
-        return redirect(url_for("get_books"))
+        return redirect(url_for("home_page"))
     else:
         flash("You must be authenticated in order to delete your account!")
-        return redirect(url_for("get_books"))
+        return redirect(url_for("home_page"))
 
 
 @app.route("/logout")
 def logout():
     flash("You have been logged out")
     session.pop("user", None)
-    return redirect(url_for("get_books"))
+    return redirect(url_for("home_page"))
 
 @app.errorhandler(404)
 def page_not_found(e):

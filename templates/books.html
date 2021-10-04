@@ -1,11 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<h3 class="deep-purple-text text-darken-4 center-align "><i>Discover your next great book!</i></h3>
-<p class="deep-purple-text text-darken-4 center-align">
-    <strong>Book Tips</strong> compiles the best and most popular books and creative reviews.
-    It’s a fun and interactive way to geek out over your favorite reads and discover all the coolest new titles you won’t find anywhere else. 
-</p>
-
 <!-- search -->
 <div class="row card-panel grey lighten-5">
     <form action="{{ url_for('search') }}" method="POST" class="col s12">
