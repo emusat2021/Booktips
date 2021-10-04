@@ -21,7 +21,41 @@ main {
 }
 
 /* Media Queries */
-@media only screen and (min-width: 768px) {
+/* mobile */
+@media only screen and (min-width: 200px) {
+  .img-custom {
+    width: 20%;
+    height: 20%;
+  }
+  h3, h5 {
+    font-size: 1.3rem;
+  }
+}
+@media only screen and (min-width: 320px) {
+  .img-custom {
+    width: 100%;
+    height: 100%;
+  }
+  h3, h5 {
+    font-size: 1.3rem;
+  }
+}
+/* tablet */
+@media only screen and (min-width: 780px) {
+  .img-custom {
+    width: 50%;
+    height: auto;
+  }
+}
+/* laptop */
+@media only screen and (min-width: 1200px) {
+  .img-custom {
+    width: 50%;
+    height: auto;
+  }
+}
+/* desktop */
+@media only screen and (min-width: 1600px) {
   .img-custom {
     width: 50%;
     height: auto;
