@@ -360,7 +360,7 @@ def register():
             flash("Username already exists")
             return redirect(url_for("register"))
 
-        # verify that the pasword is equal to confirm password
+        # verify that the password is equal to confirm password
         if request.form.get("password") != request.form.get("confirm_password"):
             flash("Passwords do not match")
             return redirect(url_for("register"))
