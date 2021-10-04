@@ -242,7 +242,9 @@ def add_review(book_id):
         if request.method == "GET":
             # read book details from DB
             book = mongo.db.books.find_one({"_id": ObjectId(book_id)})
-
+            if not book:
+                flash("Cannot write a review for a non existing book!")
+                return redirect(url_for("get_books"))
             return render_template(
                 "action_review.html", book=book, review_j2=review_db, source_route="add"
             )
@@ -285,6 +287,9 @@ def edit_review(book_id):
                     "user_id": user_id,
                 }
             )
+            if not book:
+                flash("Cannot edit a review for a non existing book!")
+                return redirect(url_for("get_books"))
 
             return render_template(
                 "action_review.html",
