@@ -24,7 +24,7 @@ The live website of [**Book Tips**](https://booktips-em.herokuapp.com/) can be v
   - <a href="#features-future">2.2 Features left to implement in the future</a>
 - <a href="#technologies">3. Technologies used</a>
 - <a href="#testing">4. Testing</a>
-- <a href="#deployment">5. Deployment</a>
+- <a href="#deployment">5. DeploymentHeroku was replaced with Render. Please see info about all updates and instructions [here](DEPLOYMENT-RENDER.md).</a>
 - <a href="#credits">6. Credits</a>
 - <a href="#Acknowledge">7. Acknowledge</a>
 - <a href="#Acknowledge">8. Disclaimer</a>
@@ -437,7 +437,7 @@ To make a local clone, follow the following steps.
     ```
 4. Run the app: Open your terminal window in your IDE. Type python3 app.py and run the app.
 
-#### Heroku Deployment  
+#### Heroku Deployment(Heroku was replaced with Render. Please see info about all updates and instructions [here](DEPLOYMENT-RENDER.md).)
 1. Set up local workspace for Heroku 
     - In terminal window of your IDE type: ```pip3 freeze -- local > requirements.txt.``` (Heroku detects this as a Python app. The reason that they've been able to detect Python is because we have a requirements.txt file)
 
